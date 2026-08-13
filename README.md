@@ -11,6 +11,7 @@ PM/QA workflows I've built and used while working on [Feasible Research](https:/
 | [`feasible-lab-prd`](skills/feasible-lab-prd/SKILL.md) | Generates an Acceptance-Criteria-centric PRD draft | When you need to quickly draft a Markdown PRD for a new feature/project |
 | [`functional-tc-authoring`](skills/functional-tc-authoring/SKILL.md) | Writes manual-QA functional test-case sheets grounded in the actual frontend code | When you need TCs pulled accurately from the code, not guessed from the UI |
 | [`policy-doc`](skills/policy-doc/SKILL.md) | Generates and maintains service policy docs (PRD/TC → policy.md), verified against code | When planning and actual implementation have drifted and you need to reconcile the policy doc |
+| [`ai-usage-retro`](skills/ai-usage-retro/SKILL.md) | Evaluates your actual AI usage from real artifacts (not self-report) and turns it into an improvement loop matched against new capabilities | On a recurring cadence, to check whether your AI workflow is keeping up with what's now possible |
 
 Each skill's `SKILL.md` has the full procedure; some also ship templates under `references/`.
 

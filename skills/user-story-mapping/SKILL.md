@@ -28,9 +28,9 @@ This is not a backlog — it's a strategic artifact that shows *how* users accom
 ### The Jeff Patton Story Mapping Framework
 
 **Horizontal axis (left-to-right):** User journey over time
-- **Backbone:** High-level activities the user performs (3–5개)
-- **Steps:** Specific actions within each activity (각 3–5개)
-- **Tasks:** Detailed work required to complete each step (각 5–7개)
+- **Backbone:** High-level activities the user performs (3-5)
+- **Steps:** Specific actions within each activity (3-5 each)
+- **Tasks:** Detailed work required to complete each step (5-7 each)
 
 **Vertical axis (top-to-bottom):** Priority and releases
 - **Top rows:** Essential tasks (MVP / Release 1)
@@ -56,44 +56,44 @@ Segment → Persona → Narrative (User's goal)
 
 ### Anti-Patterns
 
-- **백로그가 아님**: Activity는 제품이 제공하는 기능이 아니라 사용자의 행동
-- **간트차트가 아님**: 프로젝트 일정이 아니라 사용자 여정 시각화
-- **정적이지 않음**: 사용자를 더 알아갈수록 지속적으로 업데이트
+- **Not a backlog**: an Activity is user behavior, not a feature the product provides
+- **Not a Gantt chart**: this visualizes the user journey, not a project timeline
+- **Not static**: keep updating it continuously as you learn more about your users
 
 ---
 
 ## Application
 
-### Step 1: Segment & Persona 정의
+### Step 1: Define Segment & Persona
 
 ```markdown
 ### Segment:
-- [타겟 세그먼트. 예: "50인 이상 자산운용사의 IR 담당자"]
+- [The target segment. Example: "IR staff at asset managers with 50+ employees"]
 
 ### Persona:
-- [이름, 역할, 주요 페인포인트, 목표]
+- [Name, role, main pain points, goals]
 ```
 
-**체크:** "사용자"가 아니라 구체적 직군/역할로 명시
+**Check:** name a specific role/function, not just "the user"
 
 ---
 
-### Step 2: Narrative 정의
+### Step 2: Define the Narrative
 
-사용자가 달성하려는 것을 Jobs-to-be-Done 문장으로:
+Write what the user is trying to accomplish as a Jobs-to-be-Done statement:
 
 ```markdown
 ### Narrative:
-- [한 문장. 예: "DDQ를 받아서 정확하고 빠르게 완성해 기관투자자에게 제출한다"]
+- [One sentence. Example: "Receive a DDQ, complete it accurately and quickly, and submit it to institutional investors"]
 ```
 
-**체크:** "제품을 사용한다"가 아니라 사용자가 원하는 결과로 작성
+**Check:** write it as the outcome the user wants, not "uses the product"
 
 ---
 
-### Step 3: Activities (Backbone) 정의
+### Step 3: Define Activities (Backbone)
 
-3–5개의 고수준 Activity. 사용자가 *하는 것* 기준:
+3-5 high-level Activities, framed around what the user *does*:
 
 ```markdown
 ### Activities:
@@ -104,77 +104,77 @@ Segment → Persona → Narrative (User's goal)
 5. [Activity 5, optional]
 ```
 
-**체크:** 순서가 있고(왼→오), 사용자 행동 기준
+**Check:** ordered left-to-right, framed around user behavior
 
 ---
 
-### Step 4: Steps 정의
+### Step 4: Define Steps
 
-각 Activity를 3–5개 Step으로 세분화:
+Break each Activity into 3-5 Steps:
 
 ```markdown
 ### Steps:
 
-**Activity 1: [이름]**
+**Activity 1: [name]**
 - Step 1:
 - Step 2:
 - Step 3:
 
-**Activity 2: [이름]**
+**Activity 2: [name]**
 - Step 1:
 ...
 ```
 
-**체크:** 관찰 가능한 행동, 논리적 순서
+**Check:** observable behavior, in logical order
 
 ---
 
-### Step 5: Tasks 정의
+### Step 5: Define Tasks
 
-각 Step을 5–7개 Task로 세분화:
+Break each Step into 5-7 Tasks:
 
 ```markdown
 ### Tasks:
 
-**Activity 1 / Step 1: [이름]**
+**Activity 1 / Step 1: [name]**
 - Task 1:
 - Task 2:
 - Task 3:
 ```
 
-**체크:** 실제로 빌드할 수 있는 단위
+**Check:** units that can actually be built
 
 ---
 
-### Step 6: Release Slices 정의
+### Step 6: Define Release Slices
 
-수평선으로 릴리즈 컷:
+Cut releases with horizontal lines:
 
 ```markdown
 ### Release Slices:
 
 **Release 1 (MVP):**
-- [포함 Task 목록 — 핵심 흐름만]
+- [List of included Tasks — core flow only]
 
 **Release 2:**
-- [추가 Task — 협업/자동화 등]
+- [Additional Tasks — collaboration/automation, etc.]
 
 **Release 3 (Growth):**
-- [확장 기능]
+- [Expansion features]
 ```
 
-**MVP 기준:** "이 선 위의 Task만으로 사용자가 목표를 달성할 수 있는가?"
+**MVP criterion:** "Can the user reach their goal with only the Tasks above this line?"
 
 ---
 
-## Output 형식 (Obsidian 마크다운)
+## Output Format (Markdown)
 
-결과물은 아래 구조로 Obsidian에 저장:
+Save the result in this structure:
 
 ```markdown
-# [제품명] 유저 스토리 맵
+# [Product name] User Story Map
 
-## 컨텍스트
+## Context
 - **Segment:** ...
 - **Persona:** ...
 - **Narrative:** ...
@@ -185,17 +185,17 @@ Segment → Persona → Narrative (User's goal)
 
 ## Story Map
 
-### Activity 1: [이름]
+### Activity 1: [name]
 #### Steps & Tasks
 | Step | MVP Tasks | R2 Tasks | R3 Tasks |
 |---|---|---|---|
 
 ...
 
-## 비기능 요건 (기술 요건)
-별도 파일로 분리: `기술 요건.md`
+## Non-Functional Requirements (technical requirements)
+Keep as a separate file: `technical-requirements.md`
 
-## 업데이트 로그
-- YYYY-MM-DD: 초기 작성 (가설 기반)
-- YYYY-MM-DD: 팀 워크샵 후 업데이트
+## Update Log
+- YYYY-MM-DD: Initial draft (hypothesis-based)
+- YYYY-MM-DD: Updated after team workshop
 ```

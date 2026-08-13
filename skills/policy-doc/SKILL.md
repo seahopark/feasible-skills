@@ -1,199 +1,198 @@
 ---
 name: policy-doc
 description: |
-  서비스 정책 문서를 마크다운으로 구조화하고 생성/수정/관리하는 스킬.
-  PRD나 TC 엑셀을 정책서로 변환하거나, 기존 정책서를 업데이트할 때 사용한다.
-  이슈 트래커(Linear, Jira, GitHub Issues 등)가 연결된 경우 관련 컨텍스트를 먼저 조회하고 연동하며,
-  서비스 코드 저장소에 접근 가능한 경우 문서와 실제 구현을 대조해 정확도를 높인다.
+  Structures, generates, and maintains service policy documents in Markdown.
+  Use it to convert a PRD or a TC spreadsheet into a policy doc, or to update an existing one.
+  When an issue tracker (Linear, Jira, GitHub Issues, etc.) is connected, it looks up related context first and links it in; when the service's code repo is accessible, it cross-checks the doc against the actual implementation to improve accuracy.
 
-  다음 상황에서 반드시 이 스킬을 사용하라:
-  - "정책서 만들어줘", "policy.md 작성해줘" 등 정책 문서 생성 요청
-  - "PRD를 정책서로 변환해줘", "TC 분석해서 문서화해줘" 등 변환 요청
-  - "ux-spec 작성해줘", "UX 스펙 정리해줘" 등 UX 스펙 문서 요청
-  - "common-ux 업데이트해줘", "공통 규칙 추가해줘" 등 공통 정의 수정 요청
-  - 기존 정책서 섹션 추가, 수정, 리뷰 요청
-  - 이슈/PRD 기반으로 정책 문서를 생성하는 경우
-  - 기존 정책서가 실제 구현(코드)과 맞는지 검증/갱신하는 경우
+  Use this skill whenever:
+  - Someone asks to write a policy doc ("make a policy doc", "write policy.md")
+  - Someone asks to convert a PRD or analyze a TC sheet into documentation
+  - Someone asks for a UX spec ("write a ux-spec", "put together the UX spec")
+  - Someone asks to update common-ux.md or add a shared rule ("update common-ux", "add a common rule")
+  - A section needs to be added to, edited in, or reviewed in an existing policy doc
+  - A policy doc needs to be generated from an issue or a PRD
+  - An existing policy doc needs to be verified/updated against the actual implementation (code)
 ---
 
-# 정책 문서 관리 스킬
+# Policy Document Management Skill
 
-## 핵심 원칙
+## Core principles
 
-- **기획/개발/QA가 동일한 기준으로 참조**할 수 있도록 일관된 구조 유지
-- 모든 항목의 근거 상태를 아래 "근거 상태 표기법"에 따라 명확히 표기 (빈칸 금지)
-- 근거가 여러 소스(코드 저장소, 이슈 트래커, 기존 문서)에 걸쳐 있으면 **하나만 보고 결론 내리지 않는다** — 교차 확인
-- 변경 이력 섹션은 작성하지 않음 (Git이 관리)
-- 색상/간격/폰트 등 시각적 내용은 Figma로 위임, 문서에 담지 않음
+- Keep a **consistent structure so planning, engineering, and QA can all reference the same source of truth**
+- Mark the evidence status of every item explicitly using the "evidence-status notation" below (never leave it blank)
+- When evidence spans multiple sources (code repo, issue tracker, existing docs), **never conclude from just one** — cross-check
+- Don't write a changelog section (Git already handles that)
+- Delegate visual details (colors/spacing/fonts) to Figma; don't put them in the document
 
 ---
 
-## 근거 상태 표기법
+## Evidence-status notation
 
-문서/기획 내용과 실제 구현이 다른 경우가 흔하기 때문에, "아직 안 정해짐"과 "확인해보니 없음"을 같은 표기로 뭉개면 문서 신뢰도가 떨어지고 개발/QA가 잘못된 가정으로 작업하게 된다. 아래 4단계로 구분해서 표기한다.
+It's common for planning docs and the actual implementation to diverge. Collapsing "not decided yet" and "confirmed to not exist" into the same notation erodes trust in the document and leads engineering/QA to work off wrong assumptions. Use these four levels instead.
 
-| 표기 | 의미 | 사용 기준 |
+| Notation | Meaning | When to use it |
 |---|---|---|
-| `[확인됨]` | 명확한 근거로 확인됨 | 근거 출처(코드 위치, 문서명, 이슈 번호 등)를 옆에 병기 |
-| `[확인됨: 없음]` | 기능/필드/제약이 존재하지 않음이 확인됨 | "미결"이 아니라 "정책상 없다"가 답인 경우. 관련 로직을 찾아봤지만 없다는 뜻 — 단순히 못 찾은 것과 구분 |
-| `[확인 필요]` | 근거를 찾지 못함, 미확인 | 없다고 단정하지 말고 미확인 상태로 남긴다 |
-| `[모순]` | 소스 간 서술이 불일치 | 상충하는 소스를 모두 병기하고, 가능하면 더 신뢰할 수 있는 소스(대개 실제 구현/코드)로 판단한 근거를 남긴다 |
+| `[confirmed]` | Confirmed with clear evidence | Cite the source alongside it (code location, doc name, issue number, etc.) |
+| `[confirmed: absent]` | Confirmed that the feature/field/constraint does not exist | For when the answer is "not part of the policy," not "undecided." Means you looked for the relevant logic and it isn't there — distinct from simply not having found it |
+| `[needs confirmation]` | No evidence found, unconfirmed | Don't assume it's absent — leave it unconfirmed |
+| `[contradiction]` | Sources disagree | Cite every conflicting source, and if possible note which one you judged more trustworthy (usually the actual implementation/code) and why |
 
 ---
 
-## Step 0: 사전 컨텍스트 확인
+## Step 0: Confirm context up front
 
-문서를 새로 쓰거나 갱신하기 전에, 아래 세 가지를 확인 가능한 범위 내에서 순서대로 점검한다. 해당 사항이 없으면 바로 다음 단계로 넘어간다.
+Before writing or updating a document, check the three things below, in order, to the extent you can. Skip to the next step if something doesn't apply.
 
-### 0-1. 이슈 트래커 컨텍스트 (연결된 경우)
+### 0-1. Issue-tracker context (if connected)
 
 ```
-우선순위:
-1. URL이 직접 제공된 경우 → web_fetch 또는 해당 MCP 툴로 조회
-2. 이슈 번호/ID가 있는 경우 → 연결된 이슈 트래커 MCP로 조회
-3. 프로젝트명/기능명만 있는 경우 → 이슈 트래커에서 검색
-4. 아무것도 없는 경우 → 0-2로 진행
+Priority order:
+1. A URL was given directly → look it up with web_fetch or the relevant MCP tool
+2. There's an issue number/ID → look it up via the connected issue-tracker MCP
+3. Only a project/feature name exists → search the issue tracker
+4. Nothing at all → proceed to 0-2
 ```
 
-확인할 항목: 스코프, 현재 상태(Planned/In Progress/Done), 마일스톤/담당자, 기존 PRD 또는 정책 문서 링크.
+What to confirm: scope, current status (Planned/In Progress/Done), milestone/owner, links to any existing PRD or policy doc.
 
-### 0-2. 기존 문서 우선 검색
+### 0-2. Search existing documents first
 
-같은 도메인을 다루는 과거 PRD, 기획 초안, 미팅 메모 등이 워크스페이스/문서 저장소에 이미 있는지 먼저 찾는다. 처음부터 백지 상태로("역기획") 접근하면 이미 있는 더 상세한 문서를 놓칠 수 있다. 발견하면 그 문서를 기준선으로 삼고, 코드/이슈트래커와 대조해 최신 상태만 갱신하는 편이 새로 쓰는 것보다 정확하고 빠르다.
+Check whether the workspace/document store already has a past PRD, planning draft, or meeting notes covering the same domain. Starting from a blank slate ("reverse-engineer everything") risks missing a more detailed document that already exists. If you find one, treat it as the baseline and only update it against the code/issue tracker to bring it current — that's more accurate and faster than writing from scratch.
 
-### 0-3. 코드베이스 검증 (연결된 저장소가 있는 경우)
+### 0-3. Codebase verification (if a connected repo exists)
 
-정책 문서가 다루는 서비스의 소스 코드에 접근 가능하면, 작성/검증 전에 아래 우선순위로 근거를 찾는다. 기획 문서와 실제 구현이 어긋나는 경우가 흔하므로, 최종 판단은 가능하면 코드 쪽에 둔다.
+If you can access the source code for the service the policy doc covers, look for evidence in this priority order before writing or verifying. Planning docs and actual implementation frequently diverge, so let the code have the final say wherever possible.
 
-1. **결정 기록** (ADR, decision log 등) — "왜 이렇게 정했는가"가 가장 빨리 나오는 곳. `[확인 필요]`로 보이던 질문 상당수가 이미 여기 답이 있을 수 있다.
-2. **도메인 모델** (enum, 타입/스키마 정의) — 상태값·필드명은 화면을 보고 추측하지 말고 여기서 그대로 가져온다.
-3. **스키마 변경 이력** (마이그레이션 파일명, 관련 커밋 로그) — 파일명만 훑어도 리네임/제거/이관 히스토리가 드러난다.
-4. **테스트 코드** — 테스트명과 설명이 실제 동작 계약인 경우가 많다. 엣지 케이스 확인에 특히 유용.
-5. **기계 판독 가능한 계약 파일** (OpenAPI 스펙, 스키마 export, 라우트 소유권 매핑 등) — 있으면 항상 최신 상태와 대조 가능한 근거가 된다.
+1. **Decision records** (ADRs, decision logs, etc.) — the fastest place to find "why was this decided this way." Many questions that look like `[needs confirmation]` may already be answered here.
+2. **Domain model** (enums, type/schema definitions) — pull state values and field names directly from here rather than guessing from the screen.
+3. **Schema change history** (migration file names, related commit log) — skimming file names alone often reveals rename/removal/migration history.
+4. **Test code** — test names and descriptions are often the actual behavioral contract. Especially useful for confirming edge cases.
+5. **Machine-readable contract files** (OpenAPI specs, schema exports, route-ownership mappings, etc.) — when they exist, they're evidence you can always diff against current state.
 
-**교차 확인 원칙**: 서비스가 여러 저장소/모듈로 나뉘어 있다면, 한 저장소에서 기능이 사라진 것처럼 보여도 다른 저장소로 이관된 것일 수 있다. 저장소 하나만 보고 "기능이 없어졌다"고 단정하지 말고 관련 저장소를 교차 확인한다.
+**Cross-checking principle**: if a service is split across multiple repos/modules, a feature that looks like it disappeared from one repo might have simply moved to another. Don't conclude "this feature is gone" from a single repo — cross-check related repos.
 
-**저장 주체 구분**: 필드/값을 문서화할 때, 서버에 저장되는 값인지 클라이언트가 매번 계산하는 파생값인지 구분해서 표기한다(템플릿 6번 섹션 참고). 구분 없이 적으면 "서버가 판정해서 내려주는 값"으로 오해되어 정책의 핵심 주장(정확도·신뢰도 등)이 왜곡될 수 있다.
+**Distinguish what's actually stored**: when documenting a field or value, mark whether it's a value stored server-side or a derived value the client computes each time (see template section 6). Failing to distinguish this can make a client-computed value look like "something the server judges and returns," which distorts the policy's core claims (accuracy, trust level, etc.).
 
-**용어 구분**: 화면에 보이는 표시명(UI 라벨)과 코드/DB상의 내부 모델명이 다른 경우(리네임 이력 등)가 있다. 하나로 통일해 적지 말고 둘 다 표기한다(템플릿 2번 섹션 참고).
+**Distinguish terminology**: the display name shown on screen (UI label) and the internal model name in code/DB sometimes differ (e.g. due to a rename history). Don't collapse them into one — record both (see template section 2).
 
 ---
 
-## Step 1: 문서 유형 판단
+## Step 1: Decide the document type
 
-요청을 받으면 아래 기준으로 어떤 문서를 만들지 먼저 결정한다.
+When a request comes in, first decide which document to produce using the criteria below.
 
-| 요청 내용 | 생성할 문서 | 참조 |
+| Request | Document to create | Reference |
 |---|---|---|
-| "~정책 정리해줘", "허용/금지 규칙" | `policy.md` | references/template-policy.md |
-| "화면 동작 정의해줘", "클릭 시 어떻게" | `ux-spec.md` | references/template-ux-spec.md |
-| "공통 규칙 추가", "전체 서비스 패턴" | `common-ux.md` | references/template-common-ux.md |
-| TC 엑셀 파일 첨부 | 분석 후 판단 | references/tc-analysis-guide.md |
-| PRD → 정책서 변환 | policy.md + ux-spec.md | 둘 다 |
-| 기존 정책서를 코드와 대조해 검증/갱신 | 대상 policy.md (신규 생성 아님) | Step 0-3 우선 수행 |
+| "clean up the ~ policy," "allow/deny rules" | `policy.md` | references/template-policy.md |
+| "define screen behavior," "what happens on click" | `ux-spec.md` | references/template-ux-spec.md |
+| "add a common rule," "a pattern that applies service-wide" | `common-ux.md` | references/template-common-ux.md |
+| A TC spreadsheet is attached | Decide after analysis | references/tc-analysis-guide.md |
+| Converting a PRD into a policy doc | policy.md + ux-spec.md | both |
+| Verifying/updating an existing policy doc against code | target policy.md (not a new doc) | run Step 0-3 first |
 
 ---
 
-## Step 2: 파일 경로 결정
+## Step 2: Decide the file path
 
-서비스의 도메인 구조에 맞게 `/docs/policy/` 하위에 경로를 잡는다. 예시:
+Lay out paths under `/docs/policy/` to match the service's domain structure. Example:
 
 ```
 /docs/policy/
 ├── common-ux.md
-├── {도메인A}/
+├── {domain-A}/
 │   ├── policy.md
 │   ├── ux-spec.md
-│   └── {하위기능}.md
-├── {도메인B}/
+│   └── {sub-feature}.md
+├── {domain-B}/
 │   ├── policy.md
 │   └── ux-spec.md
-└── {횡단 관심사, 예: 알림/권한}/
+└── {cross-cutting concern, e.g. notifications/permissions}/
     └── policy.md
 ```
 
-기존 트리가 있으면 그 구조를 우선 따르고, 없으면 도메인 단위(제품이 실제로 나뉘는 기능 경계)로 새 경로를 제안한 뒤 확인받는다.
+If a tree already exists, follow its structure first. If not, propose a new path organized by domain (the feature boundaries the product actually splits along) and confirm before proceeding.
 
 ---
 
-## Step 3: 문서 비대화 시 분할 기준
+## Step 3: When to split a document that's grown too large
 
-단일 정책 문서에 서로 다른 책임의 하위 도메인이 계속 쌓이면 읽기 어려워지고 갱신 누락이 생기기 쉽다. 아래 기준에 해당하면 허브 문서 + 도메인별 하위 문서로 분리한다.
+When a single policy document keeps accumulating sub-domains with different owners, it gets harder to read and updates start getting missed. Split it into a hub document plus per-domain sub-documents when any of these apply.
 
-**분리 신호:**
-- 문서 하나 안에 책임이 다른 하위 도메인이 3개 이상 섞여 있음
-- 특정 도메인 내용을 찾는 데 스크롤/검색이 오래 걸림
-- 미결 질문 목록이 도메인 구분 없이 한 곳에 뭉쳐 있어 소유권이 불분명함
+**Signs it's time to split:**
+- A single document mixes 3+ sub-domains with different ownership
+- Finding content for a specific domain takes a long scroll/search
+- The list of open questions is lumped together with no domain separation, so ownership is unclear
 
-**분리 방법:**
-- 허브 문서: 전체 개요, 모듈 지도(하위 문서 링크), 모듈 간 의존 관계, 정보구조(IA)만 남긴다
-- 도메인 문서: 해당 도메인의 정의·규칙·미결 질문·데이터 필드만 담는다
-- 허브 문서를 참조하던 다른 문서(스토리맵, 로드맵 등)의 링크도 실제 내용이 있는 하위 문서로 갱신한다
+**How to split:**
+- Hub document: keep only the overall overview, a module map (links to sub-documents), cross-module dependencies, and the information architecture
+- Domain documents: keep only that domain's definitions, rules, open questions, and data fields
+- Update links in any other documents that referenced the hub (story maps, roadmaps, etc.) to point at the sub-document that now holds the actual content
 
 ---
 
-## Step 4: 공통 규칙 판단
+## Step 4: Deciding what's a common rule
 
-내용 작성 전, 각 규칙이 common-ux.md에 가야 하는지 판단한다.
+Before writing content, decide whether each rule belongs in common-ux.md.
 
-**common-ux.md에 넣어야 하는 경우:**
-- 2개 이상의 도메인에서 동일하게 쓰이는 규칙
-- 전체 서비스에 일관되게 적용되어야 하는 패턴
-- 시각적 효과가 아닌 동작/수치 규칙 (시간 표현, 숫자 포맷 등)
+**Put it in common-ux.md when:**
+- The same rule is used identically across 2+ domains
+- It's a pattern that must apply consistently across the whole service
+- It's a behavior/numeric rule, not a visual effect (time formatting, number formatting, etc.)
 
-**도메인 문서에 예외로 기재하는 방법:**
+**How to note an exception in a domain document:**
 ```markdown
-| 작성일      | → [공통 UX 정의 > 시간 표현]       |
-| 작성일 예외 | 24시간 초과 시 미표기 (랭킹 한정) |
+| Created date         | → [Common UX Definitions > Time Formatting]     |
+| Created date, exception | Not shown after 24 hours (ranking screen only) |
 ```
-공통 링크 먼저, 예외는 바로 아래 행에 명시.
+Link to the common rule first, then note the exception directly below it.
 
 ---
 
-## Step 5: 정책 vs UX 스펙 분류
+## Step 5: Classifying policy vs. UX spec
 
-내용 작성 시 아래 기준으로 어느 문서에 넣을지 판단한다.
+When writing content, use these criteria to decide which document it belongs in.
 
-| 이런 내용이면 | 넣을 곳 |
+| If the content reads like... | It goes in |
 |---|---|
-| "~해야 한다 / ~하면 안 된다" | policy.md |
-| "~일 때 ~를 표시한다" (조건/상태) | policy.md |
-| "최대 n줄 / n개까지" (수치) | ux-spec.md |
-| "클릭하면 ~로 이동" (동작) | ux-spec.md |
-| "~색으로 표시 / ~크기로" (시각) | Figma (문서에 담지 않음) |
-| "hover 시 ~" (인터랙션) | common-ux.md |
+| "must do ~ / must not do ~" | policy.md |
+| "when ~, show ~" (condition/state) | policy.md |
+| "up to n lines / n items" (a number) | ux-spec.md |
+| "clicking navigates to ~" (behavior) | ux-spec.md |
+| "shown in ~ color / at ~ size" (visual) | Figma (don't put it in the doc) |
+| "on hover, ~" (interaction) | common-ux.md |
 
 ---
 
-## Step 6: 문서 작성
+## Step 6: Write the document
 
-템플릿을 로드해서 작성한다. 각 템플릿은 references/ 에 있다.
+Load the relevant template and write. Each template lives in references/.
 
-- `policy.md` 작성 → `references/template-policy.md` 로드
-- `ux-spec.md` 작성 → `references/template-ux-spec.md` 로드
-- `common-ux.md` 수정 → `references/template-common-ux.md` 로드
-- TC 분석 → `references/tc-analysis-guide.md` 로드
+- Writing `policy.md` → load `references/template-policy.md`
+- Writing `ux-spec.md` → load `references/template-ux-spec.md`
+- Editing `common-ux.md` → load `references/template-common-ux.md`
+- Analyzing a TC sheet → load `references/tc-analysis-guide.md`
 
 ---
 
-## Step 7: 이슈 트래커 연동 (선택)
+## Step 7: Issue-tracker integration (optional)
 
-문서 작성 완료 후, 연결된 이슈 트래커가 있고 요청이 있거나 관련 이슈가 있으면:
+After finishing the document, if there's a connected issue tracker and either a request or a related issue exists:
 
 ```
-1. 정책 문서를 이슈 트래커 문서로 등록
-2. 관련 이슈에 "정책서 작성 완료" 코멘트 추가
-3. [확인 필요] 또는 [모순] 항목이 3개 이상이면 → 별도 이슈 생성 제안
+1. Register the policy doc in the issue tracker's document system
+2. Add a "policy doc completed" comment to the related issue
+3. If there are 3+ [needs confirmation] or [contradiction] items → propose creating a separate issue
 ```
 
-이슈 트래커가 없는 환경에서는 `[확인 필요]`/`[모순]` 항목 리스트만 별도로 정리해서 제공한다.
+In environments without an issue tracker, just compile the list of `[needs confirmation]`/`[contradiction]` items separately and hand it over.
 
 ---
 
-## 부록: 이 스킬을 적용할 때 유의할 점
+## Appendix: things to watch for when applying this skill
 
-이 스킬의 단계·기준(문서 분할 임계값, 코드베이스 검증 우선순위 등)은 여러 서비스에 두루 쓸 수 있게 일반화한 것이지, 모든 도메인에 정량적으로 딱 맞는 규칙은 아니다. 서비스마다 도메인 구조·중요 규칙·검증 가능한 소스가 크게 다르기 때문에:
+The steps and thresholds in this skill (document-split thresholds, codebase-verification priority order, etc.) are generalized to work across many services — they're not a precise fit for every domain. Domain structure, which rules matter most, and what's verifiable varies a lot by service, so:
 
-- 새 도메인/새 서비스에 처음 적용할 때는 스텝을 기계적으로 따르기보다, 이 도메인에서 특히 중요하거나 특이한 부분이 있는지 먼저 담당자(문서 소유자)에게 확인한다.
-- 문서를 지속적으로 갱신하는 과정에서 이 스킬의 기준(예: 문서 분할 신호, 근거 상태 표기, 공통/도메인 경계 판단)이 실제 상황과 안 맞는 경우가 나오면, 그 자리에서 판단해 밀어붙이지 말고 담당자에게 확인하고 필요하면 스킬 자체를 갱신한다.
-- 즉 이 스킬은 한 번 세팅하고 끝나는 게 아니라, 적용하면서 계속 다듬어야 하는 살아있는 가이드로 취급한다.
+- The first time you apply this to a new domain/service, don't follow the steps mechanically — check with the document owner first about whether there's anything unusually important or unusual about this domain.
+- If, while continuously updating documents, this skill's criteria (document-split signals, evidence-status notation, common-vs-domain boundary calls) stop matching reality, don't push through with your own judgment on the spot — confirm with the document owner, and update the skill itself if needed.
+- In short, treat this skill as a living guide that needs continuous refinement through use, not something you set up once and leave alone.

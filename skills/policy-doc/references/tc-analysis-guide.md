@@ -1,59 +1,59 @@
-# TC 엑셀 기반 정책 문서 작성 가이드
+# Guide: writing a policy doc from a TC spreadsheet
 
-## 분석 순서
+## Analysis order
 
-### Step 1: 시트 목록 파악
+### Step 1: Map out the sheet list
 ```python
 from openpyxl import load_workbook
-wb = load_workbook("TC파일.xlsx", read_only=True)
-print(wb.sheetnames)  # 도메인별 시트 확인
+wb = load_workbook("tc-file.xlsx", read_only=True)
+print(wb.sheetnames)  # check the per-domain sheets
 ```
 
-### Step 2: TC 데이터 추출
+### Step 2: Extract TC data
 ```python
-ws = wb['{시트명}']
+ws = wb['{sheet name}']
 tcs = []
 for row in ws.iter_rows(min_row=14, values_only=True):
     if row[1] is not None:
         tcs.append({
             'id':       row[1],   # TC ID
-            '2depth':   row[3],   # 컴포넌트/화면 단위
-            '3depth':   row[4],   # 세부 항목
-            'step':     row[9],   # 테스트 단계
-            'expected': row[10],  # 기대 결과 → 정책/UX 규칙으로 변환
+            '2depth':   row[3],   # component/screen unit
+            '3depth':   row[4],   # sub-item
+            'step':     row[9],   # test step
+            'expected': row[10],  # expected result → convert into a policy/UX rule
         })
 ```
 
-**주의:** `min_row`는 TC 파일마다 다를 수 있음. 헤더 행 확인 후 조정.
+**Note:** `min_row` can vary between TC files. Check the header row and adjust.
 
-### Step 3: 2depth 기준으로 그룹핑
-2depth 값을 기준으로 컴포넌트/화면 단위를 파악하고,
-각 그룹별로 `expected` 값에서 규칙을 추출한다.
+### Step 3: Group by the 2depth column
+Use the 2depth value to identify component/screen boundaries,
+then extract rules from the `expected` values within each group.
 
-### Step 4: 규칙 변환 기준
+### Step 4: Rule-conversion criteria
 
-| TC 기대 결과 형태 | 변환 방향 |
+| Shape of the TC's expected result | Converts to |
 |---|---|
-| "~이면 ~가 표시된다" | policy.md 규칙 |
-| "~를 클릭하면 ~로 이동" | ux-spec.md 동작 |
-| "최대 N자까지 입력 가능" | ux-spec.md 수치 |
-| "~일 때 버튼 비활성화" | ux-spec.md 상태 |
-| "에러 시 토스트 표시" | common-ux.md 참조 + ux-spec.md 예외 |
+| "if ~, ~ is shown" | a policy.md rule |
+| "clicking ~ navigates to ~" | a ux-spec.md behavior |
+| "up to N characters allowed" | a ux-spec.md number |
+| "button disabled when ~" | a ux-spec.md state |
+| "toast shown on error" | reference common-ux.md + note the exception in ux-spec.md |
 
-### Step 5: 근거 상태 표기 기준
+### Step 5: Evidence-status notation criteria
 
-근거 상태 표기(`[확인됨]` / `[확인됨: 없음]` / `[확인 필요]` / `[모순]`)는 SKILL.md "근거 상태 표기법" 참고. TC 분석에서는 아래 기준으로 구분한다:
+For evidence-status notation (`[confirmed]` / `[confirmed: absent]` / `[needs confirmation]` / `[contradiction]`), see "Evidence-status notation" in SKILL.md. For TC analysis specifically, use these criteria:
 
-- TC에 해당 케이스가 아예 없어서 규칙을 알 수 없는 경우 → `[확인 필요]`
-- TC에 "해당 동작/제약이 없다"는 게 명시적으로 드러나는 경우 (예: 관련 시나리오를 다루는 TC가 있는데 제약 언급이 전혀 없음) → `[확인됨: 없음]`
-- TC의 기대 결과가 서로 상충하는 경우 → `[모순]`
-- 클라이언트별 동작이 TC에 명시되지 않은 경우 → `[확인 필요]`
+- No TC covers this case at all, so the rule is unknown → `[needs confirmation]`
+- The TC explicitly shows "this behavior/constraint doesn't exist" (e.g. a TC covering the related scenario exists but never mentions the constraint) → `[confirmed: absent]`
+- The TC's expected results contradict each other → `[contradiction]`
+- Per-client behavior isn't specified in the TC → `[needs confirmation]`
 
-## 출력 형식
+## Output format
 
-TC 분석 완료 후 아래 순서로 결과 제공:
+After finishing TC analysis, deliver results in this order:
 
-1. **분석 요약**: 시트별 TC 수, 도출된 규칙 수, 상태별(확인 필요/모순) 항목 수
-2. **생성할 문서 목록**: 경로와 문서 유형
-3. **[확인 필요]/[모순] 항목 리스트**: 연결된 이슈 트래커가 있으면 이슈 생성 여부 확인, 없으면 리스트만 제공
-4. **문서 본문**: 순서대로 생성
+1. **Analysis summary**: TC count per sheet, number of rules derived, count of items by status (needs confirmation / contradiction)
+2. **List of documents to create**: path and document type
+3. **List of [needs confirmation]/[contradiction] items**: if a connected issue tracker exists, confirm whether to create issues; otherwise just hand over the list
+4. **Document bodies**: generate in order

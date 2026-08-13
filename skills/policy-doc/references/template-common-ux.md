@@ -1,92 +1,91 @@
-# common-ux.md 구조 및 업데이트 가이드
+# common-ux.md structure and update guide
 
-근거 상태 표기(`[확인됨]` / `[확인됨: 없음]` / `[확인 필요]` / `[모순]`)는 SKILL.md "근거 상태 표기법" 참고. 공통 규칙도 도메인 문서와 동일한 표기를 쓴다 — 특히 "이 서비스엔 이 패턴 자체가 없다"(`[확인됨: 없음]`)와 "아직 못 정했다"(`[확인 필요]`)를 구분해야, 도메인 문서에서 이 파일을 링크로 참조할 때 오해가 없다.
+For evidence-status notation (`[confirmed]` / `[confirmed: absent]` / `[needs confirmation]` / `[contradiction]`), see "Evidence-status notation" in SKILL.md. Common rules use the same notation as domain documents — this distinction matters especially between "this service simply doesn't have this pattern" (`[confirmed: absent]`) and "not decided yet" (`[needs confirmation]`), so domain documents linking to this file don't misread it.
 
-## 파일 구조
-
-```markdown
-# 공통 UX 정의
-
-## 0. UX 원칙
-## 1. 컴포넌트 공통 행동 (모달 / 인풋 / 버튼 등)
-## 2. 시간 표현
-## 3. 숫자 / 카운트 포맷
-## 4. 이미지 / 썸네일
-## 5. 로그인 / 비로그인 분기
-## 6. 빈 상태 (Empty State)
-## 7. 토스트 메시지
-## 8. 인터랙션 패턴 (컴포넌트에 안 묶이는 전역 패턴: 스크롤 기반 동작 등)
-## 9. 클라이언트 분기 기준
-## 10. 글로벌 서비스 예외
-```
-
-## 업데이트 원칙
-
-도메인 문서 작성 중 새로운 공통 패턴이 나오면 **즉시 common-ux.md에 추가**하고
-도메인 문서에서는 링크로 참조한다.
+## File structure
 
 ```markdown
-# 도메인 문서에서 참조하는 방법
-| 시간 표현 | → [common-ux.md > 시간 표현] |
+# Common UX Definitions
 
-# 예외가 있을 경우
-| 시간 표현      | → [common-ux.md > 시간 표현]       |
-| 시간 표현 예외 | 랭킹: 24시간 초과 시 날짜만 표기   |
+## 0. UX Principles
+## 1. Common component behavior (modals / inputs / buttons, etc.)
+## 2. Time formatting
+## 3. Number / count formatting
+## 4. Images / thumbnails
+## 5. Logged-in / logged-out branching
+## 6. Empty states
+## 7. Toast messages
+## 8. Interaction patterns (global patterns not tied to a component: scroll-based behavior, etc.)
+## 9. Client branching criteria
+## 10. Global service exceptions
 ```
 
-## 각 섹션 작성 기준
+## Update principle
 
-### 0. UX 원칙
+When a new common pattern shows up while writing a domain document, **add it to common-ux.md immediately** and reference it by link from the domain document.
 
-- 이 서비스의 UX가 따르는 상위 가치·철학을 3~5개로 짧게 정리한다. 구체적 규칙이 아니라 **판단 기준** — 아래 모든 섹션과 각 도메인 문서의 애매한 케이스를 이 원칙에 비춰 판단한다.
-- 보통 제품 가치제안(Business Discovery 등)이나 이미 코드/도메인 문서에서 반복적으로 관찰된 패턴에서 도출된다. 없는 걸 지어내지 말고, 관찰된 근거를 원칙마다 병기한다.
-- 코드로 직접 검증되는 게 아니라 제품 철학·의사결정 영역이라, 초안을 작성한 뒤 반드시 문서 소유자(담당자) 확인을 거친다 — 임의로 확정하지 않는다.
+```markdown
+# How to reference it from a domain document
+| Time formatting | → [common-ux.md > Time formatting] |
 
-### 1. 컴포넌트 공통 행동 (모달 / 인풋 / 버튼 등)
+# When there's an exception
+| Time formatting            | → [common-ux.md > Time formatting]         |
+| Time formatting, exception | Ranking screen: shows date only past 24h   |
+```
 
-- **경계 기준**: "이 컴포넌트가 어디서 쓰이든 동일하게 하는 행동"은 여기, "이 화면의 이 컴포넌트에 어떤 필드·값이 들어가는가"는 해당 도메인 문서. 예: "모달이 ESC로 닫히는가"는 공통, "이 모달에 어떤 입력 필드가 있는가"는 도메인.
-- 컴포넌트별로 하위 소제목을 둔다 (예: 1.1 모달, 1.2 인풋, 1.3 버튼). 서비스에 실제 존재하는 공통 컴포넌트만 추가하고, 안 쓰는 컴포넌트 항목을 미리 만들지 않는다.
-- 여러 도메인 문서에 같은 종류의 필드(예: name/description)가 반복해서 나오는데 제약값(글자수 등)이 같은지 다른지 불확실하면, 코드로 대조해서 실제로 공통 컨벤션인지 확인한 뒤에만 여기로 승격한다 — 확인 전엔 각 도메인 문서에 개별로 남겨둔다.
+## Criteria for writing each section
 
-### 2. 시간 표현
-- 방금, N분 전, N시간 전, N일 전 등 상대시간 기준
-- 절대시간으로 전환되는 기준값 (예: 24시간 초과 시 YYYY.MM.DD)
-- 클라이언트별 차이 있으면 표로 정리
+### 0. UX Principles
 
-### 3. 숫자 / 카운트 포맷
-- K, M 단위 절삭 기준 (예: 1,000 → 1K)
-- 소수점 처리 방식
-- 가격/퍼센트 표기 형식
+- Summarize the higher-level values/philosophy this service's UX follows in 3-5 short statements. These aren't concrete rules but **judgment criteria** — use them to resolve ambiguous cases in every other section and in each domain document.
+- These are usually derived from the product's value proposition (Business Discovery, etc.) or from patterns already observed repeatedly in code/domain documents. Don't invent principles that aren't grounded — cite the observed evidence next to each one.
+- Because this isn't directly verifiable from code but sits in product philosophy/decision territory, always get sign-off from the document owner after drafting — don't finalize it unilaterally.
 
-### 4. 이미지 / 썸네일
-- 기본 이미지(fallback) 처리 방식
-- 로딩 중 상태 표현
-- 비율 기준
+### 1. Common component behavior (modals / inputs / buttons, etc.)
 
-### 5. 로그인 / 비로그인 분기
-- 비로그인 시 접근 가능/불가 기능 기준
-- 로그인 유도 트리거 시점
-- 로그인 후 원래 화면 복귀 여부
+- **Boundary rule**: "behavior this component has identically no matter where it's used" belongs here; "which fields/values appear in this component on this particular screen" belongs in the domain document. Example: "does the modal close on ESC" is common; "which input fields does this specific modal have" is domain-specific.
+- Give each component its own subheading (e.g. 1.1 Modal, 1.2 Input, 1.3 Button). Only add components that actually exist in the service — don't pre-create entries for components that aren't used.
+- If the same kind of field (e.g. name/description) shows up repeatedly across multiple domain documents and it's unclear whether the constraints (character limits, etc.) are actually shared, only promote it here after cross-checking the code confirms it's genuinely a common convention — until confirmed, leave it recorded individually in each domain document.
 
-### 6. 빈 상태 (Empty State)
-- 데이터 없음 / 에러 / 로딩 세 가지 구분
-- 각 상태에서 표시할 텍스트 기준
-- CTA 버튼 포함 여부 기준
+### 2. Time formatting
+- Relative-time thresholds: just now, N minutes ago, N hours ago, N days ago, etc.
+- The cutoff where it switches to absolute time (e.g. YYYY.MM.DD after 24 hours)
+- Organize per-client differences into a table if they exist
 
-### 7. 토스트 메시지
-- 노출 시간 (기본값)
-- 위치 (상단/하단)
-- 성공/실패/안내 유형 구분
+### 3. Number / count formatting
+- K/M truncation thresholds (e.g. 1,000 → 1K)
+- How decimals are handled
+- Price/percentage formatting
 
-### 8. 인터랙션 패턴 (컴포넌트에 안 묶이는 전역 패턴)
-- 스크롤 기반 동작 (무한 스크롤, 페이지네이션 전환 기준)
-- 당겨서 새로고침(Pull to Refresh) 기준
-- 위 "1. 컴포넌트 공통 행동"에 넣기 애매한, 특정 컴포넌트에 종속되지 않는 패턴만 여기 둔다
+### 4. Images / thumbnails
+- Fallback-image handling
+- How the loading state is shown
+- Aspect-ratio rules
 
-### 9. 클라이언트 분기 기준
-- Web / App / mWeb 구분 기준
-- 기능별 클라이언트 지원 여부 표
+### 5. Logged-in / logged-out branching
+- Which features are accessible vs. blocked when logged out
+- When the login prompt triggers
+- Whether the user returns to the original screen after logging in
 
-### 10. 글로벌 서비스 예외
-- 언어별(KO/EN/JA) 표기 차이
-- 지역별 날짜/숫자 포맷 차이
+### 6. Empty states
+- Distinguish three cases: no data / error / loading
+- What text each state shows
+- Whether a CTA button is included
+
+### 7. Toast messages
+- Display duration (default)
+- Position (top/bottom)
+- Success/failure/info type distinctions
+
+### 8. Interaction patterns (global patterns not tied to a component)
+- Scroll-based behavior (infinite scroll, pagination cutover criteria)
+- Pull-to-refresh criteria
+- Only patterns that are ambiguous to place under "1. Common component behavior" and aren't tied to a specific component go here
+
+### 9. Client branching criteria
+- Web / App / mWeb distinction criteria
+- A table of per-feature client support
+
+### 10. Global service exceptions
+- Per-language (KO/EN/JA) notation differences
+- Per-region date/number format differences

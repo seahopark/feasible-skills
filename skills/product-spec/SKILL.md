@@ -1,326 +1,326 @@
 ---
 name: product-spec
 description: |
-  SaaS 제품을 스크린샷·인터뷰·실제 사용 기반으로 역기획하고, Business Discovery(왜 만드는가)와 Product Spec(무엇을 만드는가) 두 문서로 구조화하는 스킬.
-  신규 입사 후 제품 구조를 처음 파악할 때, 기존 제품의 기능 정의가 흩어져 있을 때, 스크린샷/Figma/실제 서비스를 보고 스펙 문서를 만들어야 할 때 사용한다.
+  Reverse-engineers a SaaS product from screenshots, interviews, and hands-on usage, and structures the findings into two documents: Business Discovery (why we're building it) and Product Spec (what we're building).
+  Use it when you're new to a team and need to understand a product's structure, when an existing product's feature definitions are missing or scattered, or when you need to turn screenshots/Figma/a live service into a spec document.
 ---
 
-# 스킬: 제품 정의 & 스펙 문서화
+# Skill: Product Definition & Spec Documentation
 
-SaaS 제품을 스크린샷·인터뷰·실제 사용 기반으로 역기획하고, 비즈니스 디스커버리와 제품 스펙을 두 문서로 구조화하는 스킬.
-
----
-
-## 언제 쓰나
-
-- 신규 입사 후 제품 구조를 처음 파악할 때
-- 기존 제품의 기능 정의가 없거나 흩어져 있을 때
-- 스크린샷·Figma·실제 서비스를 보고 스펙 문서를 만들 때
-- 개발팀·디자이너에게 전달할 기능 정의서가 필요할 때
+Reverse-engineers a SaaS product from screenshots, interviews, and hands-on usage, and structures the findings into a Business Discovery document and a Product Spec document.
 
 ---
 
-## 두 문서 원칙
+## When to use it
 
-항상 **Business Discovery**와 **Product Spec** 두 개로 분리한다.
+- When you've just joined a team and need to understand a product's structure for the first time
+- When an existing product has no feature definitions, or they're scattered across places
+- When you need to turn screenshots, Figma files, or a live service into a spec document
+- When engineering or design needs a feature definition doc handed to them
 
-| 문서 | 담는 것 | 독자 |
+---
+
+## The two-document principle
+
+Always split the output into two documents: **Business Discovery** and **Product Spec**.
+
+| Document | What it contains | Audience |
 |------|---------|------|
-| **Business Discovery** | 왜 만드는가 — 페인포인트, 가설, 시장, 임팩트 | 대표, 투자자, 영업 |
-| **Product Spec** | 무엇을 만드는가 — 모듈, 엔티티, 동작, 오픈포인트 | 개발, 디자인, PM |
+| **Business Discovery** | Why we're building it — pain points, hypotheses, market, impact | Founders, investors, sales |
+| **Product Spec** | What we're building — modules, entities, behavior, open points | Engineering, design, PM |
 
-같은 문서에 섞지 않는다. "왜"와 "무엇"은 독자도 다르고 업데이트 주기도 다르다.
+Don't mix them into one document. "Why" and "what" have different audiences and different update cadences.
 
 ---
 
-## 스크린샷 기반 역기획
+## Reverse-engineering from screenshots
 
-스크린샷은 단순히 "화면을 설명하는 것"이 아니다. 화면에서 **서비스 레이어**를 분리해내는 것이 목적이다.
+A screenshot isn't just something to "describe." The goal is to pull the **service layers** apart from what's on screen.
 
-### 서비스 레이어 분리 개념
+### The service-layer separation concept
 
-스크린샷 하나에는 세 가지 레이어가 섞여 있다.
+A single screenshot mixes three layers together.
 
-| 레이어 | 의미 | 스펙에서 하는 일 |
+| Layer | Meaning | What it becomes in the spec |
 |--------|------|----------------|
-| **데이터 레이어** | 화면에 표시되는 정보 단위 | 엔티티 필드 정의 |
-| **상태 레이어** | 데이터가 가질 수 있는 상태와 전환 조건 | 상태 머신 정의 |
-| **동작 레이어** | 사용자가 할 수 있는 액션과 결과 | 플로우 정의 |
+| **Data layer** | The units of information shown on screen | Entity field definitions |
+| **State layer** | The states data can be in and the conditions that transition between them | State machine definitions |
+| **Action layer** | What the user can do and what happens as a result | Flow definitions |
 
-UI 레이아웃(어디에 뭐가 위치하는가)은 **디자인의 영역**이므로 스펙에 넣지 않는다.
-
----
-
-### 스크린샷 유형별 분석 방법
-
-#### 리스트 화면 (목록 뷰)
-
-```
-보이는 것          → 추출하는 것
-─────────────────────────────────────
-컬럼 헤더          → 엔티티 필드명
-행의 값            → 필드 타입·예시값
-상태 배지          → Status 값 목록
-아이콘 종류        → enum 타입 (파일 형식 등)
-필터 탭            → 분류 기준·분류 체계
-정렬 기준          → 기본 정렬 필드
-우측 "..." 메뉴    → 가능한 액션 목록
-```
-
-**예시 — Projects 리스트 화면:**
-- "Due", "Project", "Status", "Client", "Assignees" 컬럼 → Project 엔티티 필드
-- Word/Excel 아이콘 → source_file.file_type = "docx" | "xlsx"
-- "In Progress" / "Not Started" 배지 → Project Status 값
-- "Project / Process / Assignee" 탭 → 필터 분류 기준 (각 조건 정의는 오픈 포인트)
-
-#### 상세/편집 화면 (폼·모달)
-
-```
-보이는 것          → 추출하는 것
-─────────────────────────────────────
-필수 표시(*)       → required 필드
-입력 필드 유형     → 타입 (text / date / textarea)
-placeholder 텍스트 → 필드 용도 힌트
-비활성화된 필드    → 조건부 편집 제약
-저장/취소 버튼     → 트랜잭션 단위
-```
-
-**예시 — Project Setting 모달:**
-- Title에 `*` → 필수 필드
-- Due Date 형식 "31/07/2026" → DD/MM/YYYY 포맷
-- Description placeholder "Provides context to help members understand..." → 필드 용도 명시
-
-#### 상태 드롭다운·배지
-
-```
-보이는 것          → 추출하는 것
-─────────────────────────────────────
-드롭다운 항목 전체 → Status 값 전체 목록
-아이콘·색상        → 상태별 시각적 의미
-현재 선택된 값     → 기본값(default) 추정
-항목 순서          → 상태 전환 방향 추정
-```
-
-**예시 — Question Status 드롭다운:**
-- "Not Started / In Progress / In Review / Approved" → 4단계 상태 머신
-- 회색 빈 원 / 주황 원 / 파란 스피너 / 초록 체크 → 각 상태의 의미 추정 가능
-- 순서가 Not Started → Approved로 흐름 → 단방향 전환 추정 (반려 시 역방향은 오픈 포인트)
-
-#### 사이드 패널·슬라이드 인
-
-```
-보이는 것          → 추출하는 것
-─────────────────────────────────────
-패널 제목          → 연결된 엔티티
-패널 내 정보 구조  → 하위 엔티티 필드
-"See file >" 링크  → 모듈 간 연결 관계
-배지·태그          → 분류 값 타입
-```
-
-**예시 — Sources 사이드 패널:**
-- 파일명 / 폴더경로 / 업데이트 시점 / High 배지 / 답변 전문 / "See file >" → source_item 엔티티 필드 전체
-
-#### 배너·알림 영역
-
-```
-보이는 것          → 추출하는 것
-─────────────────────────────────────
-배너 문구          → 시스템이 자동 계산하는 집계 값
-수치 형식          → 집계 로직 추정
-배너 표시 조건     → 트리거 이벤트
-```
-
-**예시 — "AI Matched 83% of Questions" 배너:**
-- "248 matches - 180 Exact · 27 High Confidence" → 매칭 결과 집계 구조
-- 83% = 매칭된 질문 수 / 전체 질문 수 → 집계 로직
-- 배너 위치(Overview 상단) → 프로젝트 진입 시 자동 계산
+UI layout (where things are placed on screen) belongs to **design**, not the spec — leave it out.
 
 ---
 
-### 스크린샷 세트를 받을 때 분석 순서
+### Analysis methods by screenshot type
 
-스크린샷이 여러 장 주어지면 이 순서로 분석한다.
+#### List screens (table/list views)
 
-**1. 네비게이션부터** — 사이드바나 탭 구조를 먼저 보고 모듈 목록과 계층을 파악한다.
+```
+What you see          → What you extract
+─────────────────────────────────────
+Column headers         → Entity field names
+Row values              → Field type / example values
+Status badges           → List of Status values
+Icon types              → Enum type (e.g. file format)
+Filter tabs              → Classification criteria / taxonomy
+Sort order              → Default sort field
+Row-level "..." menu     → List of possible actions
+```
 
-**2. 리스트 → 상세 순서로** — 리스트 화면이 엔티티 필드를 가장 압축적으로 보여준다. 상세 화면은 리스트에서 못 본 추가 필드를 채운다.
+**Example — a Projects list screen:**
+- "Due", "Project", "Status", "Client", "Assignees" columns → Project entity fields
+- Word/Excel icons → `source_file.file_type` = `"docx"` | `"xlsx"`
+- "In Progress" / "Not Started" badges → Project Status values
+- "Project / Process / Assignee" tabs → filter classification criteria (definitions of each condition become an open point)
 
-**3. 상태값을 전부 모은다** — 드롭다운, 배지, 필터 항목에서 상태값을 모두 수집한 뒤 상태 머신을 그린다.
+#### Detail/edit screens (forms, modals)
 
-**4. 모듈 간 연결을 찾는다** — "See file >", 소스 표기, 연결된 파일명 등에서 모듈 간 데이터 흐름을 파악한다.
+```
+What you see          → What you extract
+─────────────────────────────────────
+Required marker (*)     → required field
+Input field type          → type (text / date / textarea)
+Placeholder text          → hint about the field's purpose
+Disabled fields            → conditional edit constraints
+Save/Cancel buttons        → transaction boundary
+```
 
-**5. 보이지 않는 것을 적는다** — 스크린샷에서 확인되지 않은 것은 모두 오픈 포인트로 남긴다. 추측으로 채우지 않는다.
+**Example — a Project Setting modal:**
+- `*` on Title → required field
+- Due Date formatted as "31/07/2026" → DD/MM/YYYY format
+- Description placeholder "Provides context to help members understand..." → makes the field's purpose explicit
+
+#### Status dropdowns and badges
+
+```
+What you see          → What you extract
+─────────────────────────────────────
+Full dropdown item list    → complete list of Status values
+Icons / colors               → visual meaning per status
+Currently selected value     → inferred default value
+Item order                   → inferred direction of state transitions
+```
+
+**Example — a Question Status dropdown:**
+- "Not Started / In Progress / In Review / Approved" → a 4-stage state machine
+- gray empty circle / orange circle / blue spinner / green check → inferable meaning per state
+- order flows Not Started → Approved → inferred as a one-way transition (whether rejection allows moving backward is an open point)
+
+#### Side panels / slide-ins
+
+```
+What you see          → What you extract
+─────────────────────────────────────
+Panel title             → the entity it's tied to
+Info structure inside     → nested entity fields
+"See file >" link          → cross-module relationships
+Badges / tags              → classification value types
+```
+
+**Example — a Sources side panel:**
+- file name / folder path / update timestamp / High badge / full answer text / "See file >" → the complete set of `source_item` entity fields
+
+#### Banners and notification areas
+
+```
+What you see          → What you extract
+─────────────────────────────────────
+Banner copy             → a value the system auto-computes
+Number formatting          → inferred aggregation logic
+Conditions for the banner to appear → the triggering event
+```
+
+**Example — an "AI Matched 83% of Questions" banner:**
+- "248 matches - 180 Exact · 27 High Confidence" → the structure of the match-result aggregate
+- 83% = matched questions / total questions → the aggregation logic
+- banner placement (top of Overview) → auto-computed on project entry
 
 ---
 
-### 테스트 데이터 주의사항
+### Order of analysis when you receive a set of screenshots
 
-역기획 시 화면에 보이는 데이터가 테스트 데이터일 수 있다.
+When you're handed multiple screenshots, work through them in this order.
 
-| 의심해야 할 상황 | 처리 방법 |
+**1. Navigation first** — Look at the sidebar or tab structure first to map out the list of modules and their hierarchy.
+
+**2. List screens, then detail screens** — List screens show entity fields in the most compressed form. Detail screens fill in additional fields the list didn't show.
+
+**3. Collect every state value** — Gather all state values from dropdowns, badges, and filter items, then draw the state machine.
+
+**4. Find cross-module connections** — Trace data flow between modules through things like "See file >" links, source citations, and linked file names.
+
+**5. Write down what you can't see** — Anything not confirmed in the screenshots stays an open point. Don't fill gaps with guesses.
+
+---
+
+### A note on test data
+
+When reverse-engineering, what's on screen might be test data.
+
+| Situation to be suspicious of | How to handle it |
 |---------------|----------|
-| 수치가 지나치게 깔끔하거나 많음 | "테스트 데이터 기준" 명시, 실제 수치는 확인 후 갱신 |
-| 데이터가 실제 운영과 무관해 보임 | 담당자 확인 전까지 "테스트 환경" 주석 |
-| 미작동 기능이 화면에 존재함 | "개발 중 — 현재 미작동" 명시 |
-| 일관성 없는 데이터 | 버그인지 의도된 것인지 확인 전까지 단정 금지 |
+| Numbers are unusually clean or round | Note "based on test data"; update with real numbers once confirmed |
+| Data looks unrelated to real operations | Annotate as "test environment" until confirmed by the owner |
+| A feature on screen doesn't actually work | Note "in development — not yet functional" |
+| Inconsistent data | Don't assume bug vs. intentional design until confirmed |
 
 ---
 
-## 역기획 프로세스 전체 흐름
+## The full reverse-engineering process
 
 ```
-[스크린샷 수집]
-  유저가 스크린샷 공유 또는 직접 서비스 접속
+[Collect screenshots]
+  User shares screenshots or you access the live service directly
         ↓
-[1단계: 모듈 목록 파악]
-  네비게이션 구조 → 모듈명 + 역할 한 줄 정의
+[Step 1: Map out the module list]
+  Navigation structure → module names + one-line role definitions
         ↓
-[2단계: 스크린샷 → 레이어 분리]
-  데이터 레이어  → 엔티티·필드 추출
-  상태 레이어   → 상태값·전환 방향 추출
-  동작 레이어   → 사용자 액션·플로우 추출
+[Step 2: Screenshots → layer separation]
+  Data layer   → extract entities and fields
+  State layer  → extract state values and transition direction
+  Action layer → extract user actions and flows
         ↓
-[3단계: 초안 작성]
-  모듈 템플릿 (역할 → 엔티티 → 동작 → 오픈포인트) 적용
+[Step 3: Write the draft]
+  Apply the module template (role → entities → actions → open points)
         ↓
-[4단계: 갭 분석]
-  모듈별 미커버 영역 확인
-  모듈 간 데이터 흐름 연결 확인
-  공통 미정의 영역 식별 (권한·알림·온보딩 등)
+[Step 4: Gap analysis]
+  Check for uncovered areas per module
+  Confirm data flow connections between modules
+  Identify commonly undefined areas (permissions, notifications, onboarding, etc.)
         ↓
-[5단계: 사용자 검증·수정]
-  실제 담당자에게 초안 공유 → 틀린 부분 수정
-  테스트 데이터 vs 실제 데이터 구분 확인
+[Step 5: User verification and correction]
+  Share the draft with the actual owner → fix what's wrong
+  Confirm which parts are test data vs. real data
         ↓
-[반복]
-  스크린샷 추가 수신 → 해당 섹션만 업데이트
+[Repeat]
+  New screenshots arrive → update only the affected section
 ```
 
 ---
 
-## Business Discovery 구성
+## Business Discovery structure
 
 ```
 # Business Discovery
 
-## 요약
-핵심 명제 2~3줄
+## Summary
+The core thesis in 2-3 lines
 
-## 배경
-시장 상황 / 고객의 현재 작업 방식(As-Is) / 핵심 수치
+## Background
+Market context / customer's current workflow (as-is) / key numbers
 
-## 페인포인트
-수작업 구조 플로우 + 실제 비즈니스 리스크 테이블
+## Pain points
+The manual-process flow, plus a table of real business risk
 
-## 고객 & 여정
-페르소나 (Primary / Secondary / Gatekeeper)
-As-Is 여정 → To-Be 여정 + 플라이휠
+## Customers & journey
+Personas (Primary / Secondary / Gatekeeper)
+As-is journey → to-be journey, plus the flywheel
 
-## 전략적 접근
-타겟 / 경쟁사 / 포지셔닝 / 핵심 가치 제안
+## Strategic approach
+Target segment / competitors / positioning / core value proposition
 
-## 가설
-| # | 가설 | 검증 방법 | 상태 |
-핵심 가설 + 보조 가설 분리
+## Hypotheses
+| # | Hypothesis | Validation method | Status |
+Separate core hypotheses from supporting ones
 
-## 임팩트
-정량(측정 지표) + 정성(사용자 경험 변화)
+## Impact
+Quantitative (metrics to measure) + qualitative (change in user experience)
 ```
 
-**작성 팁:**
-- 가설은 "검증 방법"과 "상태(미검증/검증 중/확인)"를 반드시 함께 적는다
-- 페인포인트는 실제 작업 플로우를 단계별로 그린 후 각 단계의 고통을 명시한다
-- 임팩트 수치가 없으면 "측정 필요"로 명시한다 — 숫자를 가정하지 않는다
+**Writing tips:**
+- Every hypothesis needs a "validation method" and a "status" (unvalidated / validating / confirmed) attached
+- Draw pain points as a step-by-step flow of the actual workflow, and call out the pain at each step
+- If you don't have impact numbers, write "needs measurement" — don't assume a number
 
 ---
 
-## Product Spec 구성
+## Product Spec structure
 
-### 모듈 템플릿 (모든 모듈에 동일하게 적용)
+### Module template (apply identically to every module)
 
 ```
-# [모듈명]
-> 역할 한 줄
+# [Module name]
+> One-line role description
 
-## 엔티티
-(데이터 구조)
+## Entities
+(data structure)
 
-## 동작
-(필요한 모듈만 — 단순 모듈은 생략)
+## Actions
+(only for modules that need it — skip for simple modules)
 
-## 오픈 포인트
-- [ ] 미확인 사항
+## Open points
+- [ ] Unconfirmed item
 ```
 
-### 엔티티 작성 규칙
+### Entity-writing rules
 
-코드블록으로 통일. 한 엔티티당 하나의 블록.
+Always use a code block. One block per entity.
 
 ```
 EntityName
-├── field_name    설명 / 가능한 값
-├── field_name    설명
+├── field_name    description / possible values
+├── field_name    description
 └── nested[]
-    └── sub_field    설명
+    └── sub_field    description
 ```
 
-- 필수 필드는 `*` 또는 `(필수)` 표기
-- 확인 안 된 필드는 `→ 확인 필요` 인라인으로 표기
-- UI 패널 모양·화면 레이아웃 묘사는 넣지 않는다
+- Mark required fields with `*` or `(required)`
+- Mark unconfirmed fields inline with `→ needs confirmation`
+- Don't describe UI panel shapes or screen layout — that's not spec content
 
-### 동작 작성 규칙
+### Action-writing rules
 
-- 상태 전환이 있으면 상태 테이블 + 전환 흐름을 세트로 작성
-- 흐름은 코드블록 화살표 다이어그램으로 표현
-- "누가 하는가"를 항상 명시한다 (작성자 / 승인자 / 시스템)
+- If there's a state transition, write the state table together with the transition flow
+- Represent flows as an arrow diagram inside a code block
+- Always state "who does this" (author / approver / system)
 
-### 오픈 포인트 규칙
+### Open-point rules
 
-- 모듈별 오픈 포인트는 해당 모듈 섹션 끝에만 둔다 (이중 관리 금지)
-- 제품 전반에 걸친 미정의 영역은 맨 아래 `미정의 공통 영역` 섹션으로 분리
-- 오픈 포인트는 "확인이 필요한 것"만 — 추측이나 제안을 섞지 않는다
-
----
-
-## 갭 분석 체크리스트
-
-스펙 초안 완성 후 이 항목으로 커버리지를 점검한다.
-
-**모듈별**
-- [ ] 모든 모듈에 역할 정의가 있는가
-- [ ] 각 모듈의 엔티티가 정의되었는가 (데이터 없는 모듈도 이유가 명시되었는가)
-- [ ] 상태 전환이 있는 엔티티는 상태 머신이 그려졌는가
-- [ ] 모듈별 오픈 포인트가 구체적인 질문 형태로 작성되었는가
-
-**모듈 간**
-- [ ] 모듈 간 데이터 흐름이 의존 관계 다이어그램으로 정리되었는가
-- [ ] 플라이휠(순환 구조)이 있다면 어디서 데이터가 피드백되는지 명시되었는가
-- [ ] 한 모듈에서 생성된 데이터가 다른 모듈에서 어떻게 소비되는지 연결되었는가
-
-**공통 영역**
-- [ ] 권한·역할 정의 또는 미정의 명시
-- [ ] 알림(Notification) 이벤트 정의 또는 미정의 명시
-- [ ] 온보딩 플로우 정의 또는 미정의 명시
-- [ ] AI·데이터 처리 방식 정의 또는 미정의 명시
+- Keep per-module open points only at the end of that module's section — don't manage them in two places
+- Split product-wide undefined areas into a `Common undefined areas` section at the bottom
+- Open points are only for "things that need confirmation" — don't mix in guesses or suggestions
 
 ---
 
-## 구조화 체크리스트
+## Gap-analysis checklist
+
+Once the spec draft is done, check its coverage against this list.
+
+**Per module**
+- [ ] Does every module have a role definition?
+- [ ] Are each module's entities defined (and is the reason stated for modules with no data)?
+- [ ] Is the state machine drawn for entities that have state transitions?
+- [ ] Are per-module open points written as concrete questions?
+
+**Across modules**
+- [ ] Is cross-module data flow organized as a dependency diagram?
+- [ ] If there's a flywheel (a feedback loop), is it clear where data feeds back in?
+- [ ] Is it clear how data created in one module gets consumed by another?
+
+**Common areas**
+- [ ] Permissions/roles defined, or explicitly marked undefined
+- [ ] Notification events defined, or explicitly marked undefined
+- [ ] Onboarding flow defined, or explicitly marked undefined
+- [ ] AI/data-processing approach defined, or explicitly marked undefined
+
+---
+
+## Structuring checklist
 
 **Business Discovery**
-- [ ] 핵심 명제가 "문제 제거"와 "가치 창출" 두 관점으로 정리되었는가
-- [ ] 페인포인트가 단순 나열이 아닌 플로우 다이어그램으로 표현되었는가
-- [ ] 가설에 검증 방법이 빠진 것이 없는가
-- [ ] 임팩트 수치가 실제 측정값인지 가정값인지 구분되었는가
+- [ ] Is the core thesis organized around both "removing a problem" and "creating value"?
+- [ ] Are pain points shown as a flow diagram rather than a flat list?
+- [ ] Does every hypothesis have a validation method attached?
+- [ ] Is it clear whether impact numbers are actual measurements or assumptions?
 
 **Product Spec**
-- [ ] 모든 모듈이 동일한 4개 섹션 템플릿으로 구성되었는가
-- [ ] 엔티티가 코드블록으로 통일되었는가
-- [ ] UI 묘사(패널 레이아웃 등)가 섞여 있지 않은가
-- [ ] 오픈 포인트가 모듈 내부와 글로벌 두 곳에 중복되어 있지 않은가
-- [ ] "확인 필요"와 "제품 결정 필요"가 구분되어 있는가
+- [ ] Does every module follow the same 4-section template?
+- [ ] Are all entities written as code blocks consistently?
+- [ ] Is UI description (panel layout, etc.) kept out of the spec?
+- [ ] Are open points free of duplication between the module-level and global sections?
+- [ ] Is "needs confirmation" distinguished from "needs a product decision"?
 
 ---
 
-## 관련 파일
-- 유저 스토리 매핑 스킬: `skills/user-story-mapping/SKILL.md`
+## Related files
+- User story mapping skill: `skills/user-story-mapping/SKILL.md`

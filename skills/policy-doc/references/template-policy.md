@@ -1,98 +1,98 @@
-# 도메인 정책 문서 템플릿 (policy.md)
+# Domain policy document template (policy.md)
 
-담는 것: 무엇을 허용/금지/규정하는가 (규칙)
-담지 않는 것: 시각적 효과, 레이아웃 상세, 히스토리
+Contains: what's allowed/forbidden/mandated (the rules)
+Doesn't contain: visual effects, layout details, history
 
-근거 상태 표기(`[확인됨]` / `[확인됨: 없음]` / `[확인 필요]` / `[모순]`)는 SKILL.md "근거 상태 표기법" 참고.
+For evidence-status notation (`[confirmed]` / `[confirmed: absent]` / `[needs confirmation]` / `[contradiction]`), see "Evidence-status notation" in SKILL.md.
 
 ---
 
 ```markdown
-# {도메인명} 도메인 정책
+# {Domain name} Domain Policy
 
-> **문서 성격**: 정책 기준 문서 (Policy Reference)
-> **대상 독자**: 기획 / 디자인 / 개발 / QA
-> **UX 스펙 상세**: → [{도메인}/ux-spec.md]
-> **공통 UX 규칙**: → [common-ux.md]
+> **Document type**: Policy reference
+> **Audience**: Planning / Design / Engineering / QA
+> **UX spec detail**: → [{domain}/ux-spec.md]
+> **Common UX rules**: → [common-ux.md]
 
 ---
 
-## 1. 개요
+## 1. Overview
 
-### 1.1 이 도메인이 하는 일
-[확인 필요] 또는 한 문장으로 역할 정의
+### 1.1 What this domain does
+[needs confirmation], or a one-sentence role definition
 
-### 1.2 적용 범위
-| 구분 | 포함 내용 |
+### 1.2 Scope
+| Category | Included |
 |---|---|
-| 화면 | |
-| 데이터 | |
-| 제외 | |
+| Screens | |
+| Data | |
+| Excluded | |
 
-### 1.3 연관 도메인
-- **{도메인}** → {연결 이유}
+### 1.3 Related domains
+- **{domain}** → {reason for the connection}
 
 ---
 
-## 2. 핵심 정의
+## 2. Core definitions
 
-### 2.1 {상태값/타입 정의}
-| 내부 모델명 | UI 표시명 | 설명 | 비고 |
+### 2.1 {State value / type definition}
+| Internal model name | UI display name | Description | Notes |
 |---|---|---|---|
 | | | | |
 
-UI 표시명과 내부 모델명(코드/DB)이 같으면 한 값만 적어도 되지만, 리네임 등으로 서로 다르면 반드시 둘 다 표기한다. 화면 문구만 보고 값 이름을 추측하지 않는다 — 코드/스키마의 실제 값을 SoT로 채택.
+If the UI display name and the internal model name (code/DB) are the same, one value is enough — but if they differ (e.g. due to a rename), record both. Don't guess the value name from on-screen copy alone — treat the actual value in code/schema as the source of truth.
 
 ---
 
-## 3. 규칙
+## 3. Rules
 
-### 3.1 {규칙명}
+### 3.1 {Rule name}
 
-| 항목 | 규칙 |
+| Item | Rule |
 |---|---|
-| 조건 | |
-| 예외 | |
-| 클라이언트 차이 | Web / App / mWeb |
-| 근거 | [확인됨: {출처}] / [확인 필요] |
+| Condition | |
+| Exception | |
+| Client difference | Web / App / mWeb |
+| Evidence | [confirmed: {source}] / [needs confirmation] |
 
-### 3.2 {규칙명}
+### 3.2 {Rule name}
 ...
 
 ---
 
-## 4. 프로세스 (운영 흐름이 있는 도메인만)
+## 4. Process (only for domains with an operational flow)
 
-[확인 필요] 또는 흐름도/단계 기술
+[needs confirmation], or describe the flow/steps
 
 ---
 
-## 5. UX 레퍼런스
+## 5. UX references
 
-| 항목 | 참조 문서 |
+| Item | Referenced document |
 |---|---|
-| UX 스펙 | → [{도메인}/ux-spec.md] |
-| 공통 인터랙션 | → [common-ux.md > 인터랙션 패턴] |
+| UX spec | → [{domain}/ux-spec.md] |
+| Common interactions | → [common-ux.md > Interaction patterns] |
 
 ---
 
-## 6. 데이터 필드 요약
+## 6. Data field summary
 
-| 그룹 | 필드 | 저장 주체 | 설명 |
+| Group | Field | Storage owner | Description |
 |---|---|---|---|
-| | | 서버 저장 / 클라이언트 파생 | |
+| | | Server-stored / Client-derived | |
 
-"저장 주체"를 반드시 구분해서 적는다. 클라이언트가 매번 계산하는 파생값(예: 임계값 기반 등급 판정)을 서버 저장값처럼 적으면, 정확도·신뢰도 같은 정책의 핵심 주장이 실제와 다르게 전달될 수 있다.
+Always distinguish "storage owner." If a value the client computes on the fly (e.g. a threshold-based rating) is written as if it were server-stored, the policy's core claims (accuracy, trust level, etc.) can end up misrepresented.
 
 ---
 
-## 7. 미결 질문 (Open Questions)
+## 7. Open Questions
 
-| 번호 | 질문 | 상태 | 근거/출처 |
+| # | Question | Status | Evidence/source |
 |---|---|---|---|
-| Q1 | | [확인 필요] | |
+| Q1 | | [needs confirmation] | |
 
-- 번호는 한 번 부여하면 재사용하지 않는다 (질문이 해소되어도 번호를 지우지 말고 상태만 갱신).
-- 상태가 `[확인됨]` 또는 `[확인됨: 없음]`으로 바뀌면 근거/출처 칸에 무엇을 보고 확인했는지 남긴다 (코드 위치, 문서명, 이슈 번호 등).
-- 이 도메인 문서를 코드베이스와 재대조할 때(SKILL.md Step 0-3) 이 표부터 훑으면 됨 — `[확인 필요]` 항목이 해소됐는지부터 확인.
+- Once a number is assigned, never reuse it (when a question is resolved, update the status — don't delete the number).
+- When status changes to `[confirmed]` or `[confirmed: absent]`, note what confirmed it in the evidence/source column (code location, doc name, issue number, etc.).
+- When re-verifying this domain document against the codebase (SKILL.md Step 0-3), start with this table — check first whether any `[needs confirmation]` items have been resolved.
 ```

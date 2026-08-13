@@ -1,94 +1,93 @@
 ---
 name: functional-tc-authoring
 description: |
-  실제 프론트엔드 코드를 근거로 수동 QA용 기능 테스트케이스(TC) 스프레드시트를 작성하는 스킬.
-  화면/기능 단위로 코드를 읽어 정확한 문구·조건·상태를 추출하고, 표준 6컬럼 포맷으로 시트(주로 Google Sheets)에 기록한다.
-  policy-doc의 tc-analysis-guide와는 방향이 반대다 — 그쪽은 "기존 TC 엑셀을 읽어 정책서를 쓰는" 스킬이고,
-  이 스킬은 "코드를 읽어 새 TC를 쓰는" 스킬이다.
+  Writes a manual-QA functional test-case (TC) spreadsheet grounded in the actual frontend code.
+  Reads the code screen by screen / feature by feature to extract exact copy, conditions, and states, and records it in a standard 6-column format in a sheet (usually Google Sheets).
+  This runs in the opposite direction from the tc-analysis-guide in the policy-doc skill — that one is "read an existing TC spreadsheet and write a policy doc,"
+  while this one is "read the code and write a new TC."
 
-  다음 상황에서 사용하라:
-  - "TC 짜줘", "테스트케이스 시트 만들어줘", "기능 테스트케이스 작성해줘" 요청
-  - "이 화면/기능 코드 분석해서 TC로 정리해줘" 요청
-  - 기존 TC 시트에 새 화면/섹션 추가 요청
-  - 코드 대조로 기존 TC의 정확성을 검증/보완할 때
+  Use this skill when:
+  - Someone asks you to write TCs, build a test-case sheet, or author functional test cases
+  - Someone asks you to analyze the code for a screen/feature and turn it into TCs
+  - A new screen/section needs to be added to an existing TC sheet
+  - You need to verify or fill gaps in an existing TC sheet by cross-checking it against the code
 ---
 
-# 기능 TC 작성 스킬
+# Functional TC-Authoring Skill
 
-## 핵심 원칙
+## Core principles
 
-- **코드가 근거다.** UI만 보고 짐작하지 말고 실제 프론트엔드 소스(컴포넌트 파일)에서 정확한 버튼 문구·에러 메시지·조건을 그대로 뽑아 인용한다. 패러프레이즈하지 않는다 — QA는 화면의 문구와 시트를 문자 그대로 대조하기 때문.
-- **파일럿 먼저.** 전체 화면/기능에 적용하기 전에 작은 기능 하나를 코드 대조까지 포함해서 손으로 짜보고, 그 과정에서 컬럼 구조 자체를 검증·조정한다. 포맷이 굳어진 뒤에 나머지로 확장한다.
-- **기능 테스트만.** 사용자가 "기능만", "펑셔널만" 이라고 하면 부하/스트레스/동시성 테스트는 명시적으로 범위 밖 — 조용히 포함하지도, 조용히 빼고 넘어가지도 말고 "별도 워크스트림"이라고 짚고 넘어간다.
-- **발견한 버그는 TC가 아니다.** 코드를 읽다 보면 실제 버그, 유사 플로우 간 동작 불일치, 문구 오류, 혹은 백엔드 연동이 안 된 데모/목업 코드를 발견하게 된다. 이런 것들을 TC 행에 정상 시나리오인 것처럼 몰래 섞지 않는다 — "이슈 트리아지" 절 참고.
-- **기존 프로젝트 지식부터 확인한다.** 이 제품/코드베이스에 대해 이미 축적된 메모리·스펙 문서·이전 코드 감사 기록이 있으면 TC 작성 전에 먼저 훑는다. 같은 이슈를 처음부터 재발견하느라 시간 쓰는 대신, 기존 근거와 교차검증해서 더 정밀하게 다듬는 쪽이 낫다 — 예: "이 버튼은 프로덕션에서 숨겨진다"고 코드에서 확인했어도, 과거 감사 기록에 "그 숨김 조건이 클라이언트 컴포넌트에서 서버 전용 env var를 참조해서 실제로는 항상 undefined로 평가된다"는 더 정밀한 발견이 이미 있을 수 있다.
+- **Code is the source of truth.** Don't guess from the UI alone — pull exact button copy, error messages, and conditions directly from the actual frontend source (component files) and quote them verbatim. Don't paraphrase — QA compares the sheet against on-screen copy character for character.
+- **Pilot first.** Before applying this to the whole set of screens/features, hand-write one small feature end-to-end, including the code cross-check, and use that process to validate and adjust the column structure itself. Only expand to the rest once the format has settled.
+- **Functional tests only.** If the user says "functional only," load/stress/concurrency testing is explicitly out of scope — don't silently include it, and don't silently drop it either. Call it out as "a separate workstream."
+- **A bug you find isn't a TC.** While reading code, you'll run into real bugs, inconsistent behavior between similar flows, copy errors, or demo/mockup code with no real backend wired up. Don't quietly fold these into TC rows as if they were normal scenarios — see the "Issue triage" section below.
+- **Check existing project knowledge first.** If there's already accumulated memory, spec docs, or prior code-audit notes for this product/codebase, skim them before writing TCs. Rather than burning time rediscovering the same issue from scratch, cross-reference it with what's already known and refine further — e.g., you might confirm in code that "this button is hidden in production," but a past audit might already have the sharper finding that "the hide condition references a server-only env var inside a client component, so it always evaluates to undefined."
 
-## 6컬럼 포맷
+## The 6-column format
 
-| # | 테스트 케이스 | 사전 조건 | 실행 액션 | 기대 피드백 | 피드백 유형 |
+| # | Test Case | Precondition | Action | Expected Feedback | Feedback Type |
 |---|---|---|---|---|---|
 
-- **#**: 섹션별 짧은 접두사 + 2자리 번호 (`P-01`, `BA-03`). 접두사는 섹션 주제에서 즉석으로 만들되(list→L-, bulk action→BA-, row action→RA- 등) 문서 전체에서 유일해야 한다.
-- **기대 피드백**: 코드에서 확인한 정확한 문구를 큰따옴표로 인용. 확신 없으면 얼버무리지 말고 "(확인 필요)"를 피드백 유형 칸에 덧붙인다.
-- **피드백 유형**: Legends 탭에 정의된 이모지 카테고리(🔴 인라인 에러, 📢 툴바/토스트 알림, ⚠️ 폼 에러 배너, 🚫 버튼 비활성화, ➡️ 페이지 이동 등)를 재사용하고, 안 맞으면 자유 텍스트(`화면 상태 변경`, `모달 오픈`/`모달 닫힘`, `목록 갱신`)로 채운다. 이모지 세트는 프로젝트마다 처음 한 번만 정의하고 이후 계속 재사용 — 세부 예시는 `references/sheet-format-example.md` 참고.
+- **#**: a short per-section prefix + a 2-digit number (`P-01`, `BA-03`). Coin the prefix on the fly from the section's topic (list → `L-`, bulk action → `BA-`, row action → `RA-`, etc.); it just needs to be unique within the document.
+- **Expected Feedback**: quote the exact copy confirmed in code, in double quotes. If you're not sure, don't hedge in the cell — append "(needs confirmation)" to the Feedback Type column instead.
+- **Feedback Type**: reuse the emoji categories defined in the Legends tab (🔴 inline error, 📢 toolbar/toast notification, ⚠️ form error banner, 🚫 button disabled, ➡️ page navigation, etc.); fall back to free text (`screen state change`, `modal opens`/`modal closes`, `list refresh`) when nothing fits. Define the emoji set once per project and reuse it from then on — see `references/sheet-format-example.md` for concrete examples.
 
-## 문서/시트 구조
+## Document/sheet structure
 
-- **Legends 탭 1개**: 피드백 유형 이모지 vocabulary를 한 곳에서 정의. 문서 전체에서 재사용.
-- **기능 영역별 탭 1개씩**: 예) "프로젝트", "라이브러리". 하나의 탭에 다 우겨넣지 않는다 — 기능 영역이 바뀌면 탭도 새로 만든다.
-- **탭 안에서는 번호 섹션**: `제목 행` → `한 줄 설명 행(어떤 UI 영역/컴포넌트를 다루는지)` → `6컬럼 헤더 행` → `데이터 행들` → 다음 섹션 전 빈 행 하나로 구분. 예시는 `references/sheet-format-example.md`.
+- **One Legends tab**: defines the feedback-type emoji vocabulary in a single place, reused across the whole document.
+- **One tab per feature area**: e.g. "Projects", "Library". Don't cram everything into one tab — start a new tab when the feature area changes.
+- **Numbered sections within a tab**: `title row` → `one-line description row (which UI area/component this covers)` → `6-column header row` → `data rows` → one blank row before the next section. See `references/sheet-format-example.md` for a worked example.
 
-## 코드 근거화 워크플로우
+## The code-grounding workflow
 
-기능 영역마다 아래를 코드에서 직접 확인해서 채운다 (UI를 눈으로만 보고 채우지 않는다):
+For each feature area, confirm the following directly in code (don't fill these in from looking at the UI alone):
 
-- 필드별 유효성 규칙(필수/maxLength/포맷)과 **정확한** 에러 메시지 문구
-- 버튼 disabled 조건
-- 로딩/pending 상태 — 무슨 텍스트·스피너로 바뀌는지, 같이 잠기는 다른 버튼이 있는지
-- API 성공 시 동작 (리다이렉트? 토스트 문구? 모달 닫힘? 목록 갱신 방식이 캐시 patch인지 전체 리페치인지?)
-- API 실패 시 동작 (인라인 텍스트? 배너? 네이티브 `alert`? 조용히 무시?)
-- 빈 상태/토스트/알림의 정확한 문구
-- **이벤트 발행-구독 쌍이 실제로 맞물리는지.** `notify*`/`dispatch*` 호출이나 세션스토리지·로컬스토리지 플래그처럼 "나중에 뭔가 보여주기 위한" 신호를 발견하면, 그걸 읽는 리스너/구독 코드가 실제로 존재하는지 지금 읽고 있는 파일 목록 밖까지 grep해서 확인한다. 발행만 있고 구독이 없는 고아 배선은 실사용자가 절대 못 보는 조용한 버그일 확률이 높다 — 이번 세션에서 세션스토리지 플래그를 심기만 하고 읽는 곳이 없어 성공 토스트가 영영 안 뜨는 사례를 이렇게 잡았다.
+- Per-field validation rules (required / maxLength / format) and the **exact** error message copy
+- Button-disabled conditions
+- Loading/pending state — what text or spinner it switches to, and whether other buttons lock at the same time
+- Behavior on API success (redirect? toast copy? modal closes? does the list refresh via a cache patch or a full refetch?)
+- Behavior on API failure (inline text? banner? native `alert`? silently ignored?)
+- Exact copy for empty states, toasts, and notifications
+- **Whether publish/subscribe event pairs actually connect.** If you find a `notify*`/`dispatch*` call, or a sessionStorage/localStorage flag meant to "show something later," grep beyond the files you're currently reading to confirm a listener/subscriber actually reads it. A publish with no subscriber is a silent bug real users will never trigger a report for — this exact pattern (a sessionStorage flag written but never read, so a success toast never fires) was caught this way in a past session.
 
-## 큰 영역은 서브에이전트로 분담
+## Split large areas across subagents
 
-기능 영역 하나가 코드 1000줄을 넘는 경우가 흔하다 — 메인 컨텍스트로 다 읽지 말고 논리적으로 2~3그룹으로 쪼개 Explore 서브에이전트에 병렬로(foreground) 위임한다. 프롬프트 템플릿은 `references/subagent-prompt-template.md` 참고 — 핵심은:
+A single feature area often crosses 1,000 lines of code — don't try to read it all in the main context. Split it logically into 2-3 groups and delegate them to Explore subagents in parallel (foreground). See `references/subagent-prompt-template.md` for the prompt template. The essentials:
 
-- 제품/기능 맥락을 설명하고 정확한 파일 경로+줄수를 준다
-- "TC 행을 직접 쓰지 말고 구조화된 사실만 보고하라"고 명시한다
-- 찾아야 할 행동 카테고리 체크리스트를 준다(필터/정렬/검색/선택/벌크액션/페이지네이션/행별액션/빈상태/생성진입점 등, 기능에 맞게 조정)
-- 기존 자동화 테스트(`*.test.ts`/`*.spec.ts`)가 이 영역을 이미 커버하는지 grep해서 근거와 함께 보고하게 한다 — 파일이 **존재한다**는 것과 **실질적으로 커버한다**는 것은 다르다. env 플래그로 기본 비활성화돼 있진 않은지, UI 동작이 아니라 다른 차원(예: API 응답에 특정 필드가 있는지)만 검증하는 얕은 테스트는 아닌지까지 확인하게 한다
-- 응답 분량 상한(예: "1800단어 이내")을 준다
+- Explain the product/feature context and give exact file paths + line counts
+- State explicitly: "report structured facts only, don't write TC rows yourself"
+- Give a checklist of behavior categories to look for (filter/sort/search/select/bulk-action/pagination/row-action/empty-state/create-entry-point, etc., adjusted to the feature)
+- Have it grep whether existing automated tests (`*.test.ts`/`*.spec.ts`) already cover this area, and report with evidence — a file **existing** and a file **substantively covering** the area are different things. Have it check whether tests are disabled by default via an env flag, or are shallow tests that verify some other dimension (e.g. a field's presence in an API response) rather than actual UI behavior.
 
-서브에이전트 결과를 받은 뒤 **TC 행으로 변환하는 건 항상 메인 에이전트가 직접** 한다 — 포맷/ID 스킴 일관성을 서브에이전트에 맡기지 않는다.
+Once subagent results come back, **converting them into TC rows is always done by the main agent** — don't delegate format/ID-scheme consistency to a subagent.
 
-**이미 확인된 배경 사실은 프롬프트에 미리 박아준다.** "이 레포 전체에 이 영역을 겨냥한 자동화 테스트가 0건이다", "이 기능은 100% 로컬 목업이라 API 호출이 없다" 같은 사실을 이전 조사에서 이미 확인했다면, 서브에이전트가 매번 처음부터 grep으로 재확인하게 두지 말고 프롬프트에 "이미 확인된 사실 — 검증/보완만 하라"는 형태로 넣어준다. 완전히 생략하면 놓칠 수 있으니 "당연한 걸로 치고 건너뛰기"가 아니라 "이미 아는 걸 출발점으로 주고 그 위에 새로 발견한 것만 보태게" 하는 것 — 응답 분량도 줄고 중복 탐색도 준다.
+**Feed already-confirmed background facts into the prompt up front.** If a prior investigation already established something like "this repo has zero automated tests targeting this area" or "this feature is 100% local mockup with no API calls," don't make the subagent re-grep from scratch every time — phrase it in the prompt as "already-confirmed fact — verify/supplement only." Don't omit it entirely either; give it as a starting point and have the subagent add only newly discovered facts on top. This shortens responses and cuts down on redundant exploration.
 
-**재검증(diff 기반) 조사는 별도 템플릿을 쓴다.** 최초 저작과 재검증은 필요한 조사량이 다르다 — 최초 저작 템플릿을 재검증에 그대로 쓰면 안 바뀐 영역까지 매번 풀분량으로 다시 훑게 된다. `references/subagent-prompt-template.md`의 "재검증 모드" 절 참고.
+**Use a separate template for re-verification (diff-based) investigation.** First-pass authoring and re-verification need different amounts of investigation — reusing the first-pass template for re-verification means re-sweeping unchanged areas at full length every time. See the "Re-verification mode" section in `references/subagent-prompt-template.md`.
 
-## 검증 패스
+## Verification pass
 
-시트에 한 배치를 쓴 뒤, 사용자가 스크린샷이나 실제 화면 확인을 제공하면 그 자리에서 바로 대조해서 시트를 고친다. 예: 코드로 추정한 maxLength가 스크린샷에서 다르게 확인되면 즉시 정정 — 나중으로 미루지 않는다.
+After writing a batch to the sheet, if the user provides a screenshot or confirms the live screen, cross-check it immediately and fix the sheet on the spot. Example: if a maxLength you inferred from code turns out different in the screenshot, correct it immediately — don't defer it.
 
-## 커버리지 맵 — 다음 버전/릴리스 대응 준비
+## Coverage map — preparing for the next version/release
 
-TC는 "지금 이 커밋의 코드가 이렇게 동작한다"는 스냅샷이다. 큰 버전업(메이저 릴리스, 백엔드 마이그레이션 등)이 예정돼 있으면 지금 짠 TC를 "확정본"이 아니라 "그 시점 기준 draft"로 취급하고, 나중에 효율적으로 재검증할 수 있도록 지금 준비해둔다:
+A TC sheet is a snapshot of "how the code at this commit behaves right now." If a major version bump is planned (a major release, a backend migration, etc.), treat the TC you just wrote as a "draft as of this point," not a permanent artifact, and prepare now so it can be re-verified efficiently later:
 
-- **탭/섹션별로 어떤 코드 경로를 근거로 썼는지 별도로 기록해둔다** (스프레드시트라면 "Coverage Map" 같은 별도 탭 하나로 — 탭명 | 저장소 | 기준 커밋 | 커버 경로(글롭/파일 목록) | 확인일자). TC 행 자체에는 file:line을 넣지 않는 게 맞지만(QA용 문서니까), 이 매핑은 어딘가에 반드시 남겨야 다음에 "뭐가 바뀌었는지" 빠르게 좁힐 수 있다.
-- **여러 탭이 같은 파일을 공유하면 명시적으로 표시한다** (예: 사이드바 컴포넌트 하나가 두 기능의 진입점을 같이 담당하는 경우) — 그 파일이 나중에 바뀌면 관련된 모든 탭을 같이 재검증해야 한다.
-- **새 버전이 나오면**: 전체를 다시 짜지 않는다. `git log <기준커밋>..<새태그/커밋> --stat -- <커버 경로>`로 탭별 변경 여부부터 확인 → 걸린 탭만 해당 파일을 다시 읽고 기존 TC 행과 대조(문구/조건 바뀐 건 수정, 새 동작은 행 추가, 없어진 동작은 삭제 또는 "구버전에서 제거됨" 표시) → 안 걸린 탭은 그대로 둔다. 재검증 후 커버리지 맵의 기준 커밋/확인일자를 갱신한다.
+- **Record which code paths back each tab/section separately** (in a spreadsheet, a dedicated "Coverage Map" tab works — tab name | repo | baseline commit | covered paths (globs/file list) | date confirmed). TC rows themselves shouldn't contain file:line references (this is a QA-facing doc), but this mapping needs to live somewhere so you can quickly scope "what changed" next time.
+- **Flag it explicitly when multiple tabs share the same file** (e.g. a single sidebar component serves as the entry point for two features) — if that file changes later, every related tab needs re-verification together.
+- **When a new version ships**: don't rewrite everything. First check `git log <baseline-commit>..<new-tag/commit> --stat -- <covered-paths>` to see which tabs were touched → re-read the relevant files only for affected tabs and diff against the existing TC rows (update rows where copy/conditions changed, add rows for new behavior, remove or mark "removed in newer version" for behavior that's gone) → leave unaffected tabs untouched. After re-verifying, update the baseline commit/confirmation date in the coverage map.
 
-## 이슈 트리아지
+## Issue triage
 
-코드를 읽다가 TC 작성 중 우연히 발견하는 것들 처리 기준:
+How to handle things you stumble into while reading code for TC authoring:
 
-1. **진짜 버그/불일치/문구 오류** → TC 행으로 몰래 섞지 말고, 턴 끝에 사용자에게 별도 텍스트 리스트로 보고한다. 시트에 직접 기록하지 않는다.
-2. **테스트 가능한 행동이면서 동시에 불일치 이슈이기도 한 경우** (예: "A 경로로 삭제하면 제자리 유지, B 경로로 삭제하면 목록으로 이동") → 정상 TC 행으로 쓰되, 피드백 유형이나 피드백 칸에 "(확인 필요)"를 덧붙여 표시한다.
-3. **전체 서브플로우가 백엔드 연동 안 된 데모/목업 코드로 판명된 경우** (코드 주석에 "No API calls are made" 같은 게 있는 경우) → 그 섹션 설명 행에 경고를 남겨서, 아무도 "저장이 안 된다"를 버그로 오인해 리포트하지 않게 한다.
+1. **A real bug / inconsistency / copy error** → don't quietly fold it into a TC row; report it to the user as a separate text list at the end of the turn. Don't write it directly into the sheet.
+2. **Something that's both a testable behavior and an inconsistency issue** (e.g. "deleting via path A stays in place, deleting via path B navigates to the list") → write it as a normal TC row, but flag it with "(needs confirmation)" in the feedback type or feedback cell.
+3. **An entire sub-flow turns out to be demo/mockup code with no backend wired up** (a code comment like "No API calls are made," for example) → leave a warning in that section's description row so nobody mistakes "it doesn't save" for a bug and reports it.
 
-## 구글시트 MCP 툴 참고
+## Notes on the Google Sheets MCP tools
 
-- 읽기는 `sheets_get_values`(범위 지정)를 기본으로 쓴다. `sheets_get_full_sheet_snapshot`은 서식까지 포함해서 무거움 — 큰 시트(수천 행)에서 토큰 한도 초과로 실패한다.
-- `sheets_update_values`로 기존 셀 수정과 대량 append 둘 다 처리 가능. 단, 시트의 grid rowCount/columnCount보다 큰 범위에 쓰면 "exceeds grid limits" 에러 — 먼저 `sheets_update_sheet_properties`로 그리드를 키우거나, 새 기능 영역이면 `sheets_insert_sheet`로 처음부터 충분한 rowCount/columnCount를 준 새 탭을 만든다.
-- 이 grid limit 문제는 **새로 만든 탭에서만 나는 게 아니다.** 사람이 시트를 리뷰하면서 빈 행/열을 수동으로 정리하면 기존 탭의 grid 크기도 같이 줄어든다. 기존 탭에 큰 배치를 이어붙이기 전에도 `sheets_get_metadata`로 현재 rowCount/columnCount를 먼저 확인하는 습관을 들인다.
-- **`values` 배열에 한글 등 비-ASCII 텍스트를 넣을 때 `\uXXXX` 유니코드 이스케이프로 직접 인코딩하지 않는다.** 그냥 평문(UTF-8 원문)을 그대로 쓴다 — 이스케이프 쪽이 토큰을 더 많이 먹고, 나중에 같은 문자열을 다른 도구(Edit 등)로 매칭할 때 이스케이프 형태와 평문 형태가 서로 안 맞아 매칭 실패가 난다.
+- Default to `sheets_get_values` (with an explicit range) for reads. `sheets_get_full_sheet_snapshot` includes formatting and is heavy — it fails on large sheets (thousands of rows) by exceeding the token limit.
+- `sheets_update_values` handles both editing existing cells and bulk appends. Writing beyond the sheet's grid rowCount/columnCount throws an "exceeds grid limits" error — either grow the grid first with `sheets_update_sheet_properties`, or, for a new feature area, create a fresh tab with `sheets_insert_sheet` sized with enough rowCount/columnCount from the start.
+- **This grid-limit issue isn't unique to newly created tabs.** When a human reviews the sheet and manually cleans up empty rows/columns, the existing tab's grid size shrinks along with it. Get in the habit of checking current rowCount/columnCount with `sheets_get_metadata` before appending a large batch to an existing tab, too.
+- **When putting non-ASCII text (e.g. Korean) into the `values` array, don't hand-encode it as `\uXXXX` Unicode escapes.** Just write the plain UTF-8 text as-is — escaped form burns more tokens, and later attempts to match the same string with another tool (like Edit) will fail because the escaped form and the plain form don't match.

@@ -1,61 +1,61 @@
-# UX 스펙 문서 템플릿 (ux-spec.md)
+# UX spec document template (ux-spec.md)
 
-담는 것: 화면에서 어떻게 동작하는가 (구현 기준)
-담지 않는 것:
-- 색상/간격/폰트 등 시각적 효과 → Figma 관리
-- hover 등 인터랙션 패턴 → common-ux.md 관리
+Contains: how the screen actually behaves (implementation-level)
+Doesn't contain:
+- Visual effects like color/spacing/font → managed in Figma
+- Interaction patterns like hover → managed in common-ux.md
 
-근거 상태 표기(`[확인됨]` / `[확인됨: 없음]` / `[확인 필요]` / `[모순]`)는 SKILL.md "근거 상태 표기법" 참고. 이 문서에서도 동일하게 적용한다.
+For evidence-status notation (`[confirmed]` / `[confirmed: absent]` / `[needs confirmation]` / `[contradiction]`), see "Evidence-status notation" in SKILL.md — applies the same way here.
 
 ---
 
 ```markdown
-# {도메인명} UX 스펙
+# {Domain name} UX Spec
 
-> **문서 성격**: UX 구현 기준 문서 (UX Spec)
-> **대상 독자**: 개발 / QA
-> **시각적 효과 / 레이아웃**: → Figma 참조
-> **인터랙션 패턴**: → [common-ux.md > 인터랙션 패턴]
-> **정책 기준**: → [policy.md]
-> **공통 UX 규칙**: → [common-ux.md]
+> **Document type**: UX implementation reference
+> **Audience**: Engineering / QA
+> **Visual effects / layout**: → see Figma
+> **Interaction patterns**: → [common-ux.md > Interaction patterns]
+> **Policy reference**: → [policy.md]
+> **Common UX rules**: → [common-ux.md]
 
 ---
 
-## 1. {화면명}
+## 1. {Screen name}
 
-### 1.1 {컴포넌트명}
+### 1.1 {Component name}
 
-| 항목 | 규칙 |
+| Item | Rule |
 |---|---|
-| 제목 줄수 | 최대 n줄, 말줄임 |
-| 클릭 동작 | {이동 목적지} |
-| 클라이언트 예외 | Web / App / mWeb 차이 |
-| 빈 상태 | 숨김 or 기본 이미지 |
-| 비로그인 | → [common-ux.md > 로그인/비로그인 분기] |
+| Title line count | Max n lines, truncated with ellipsis |
+| Click behavior | {navigation destination} |
+| Client exception | Web / App / mWeb difference |
+| Empty state | Hidden or default image |
+| Logged out | → [common-ux.md > Logged-in/out branching] |
 
-### 1.2 {컴포넌트명}
+### 1.2 {Component name}
 ...
 
 ---
 
-## 2. {화면명}
+## 2. {Screen name}
 
-### 2.1 {컴포넌트명}
+### 2.1 {Component name}
 ...
 
 ---
 
-## 클라이언트 분기 기준
-→ [common-ux.md > 클라이언트 분기 기준]
+## Client branching criteria
+→ [common-ux.md > Client branching criteria]
 
-| 항목 | Web | App | mWeb |
+| Item | Web | App | mWeb |
 |---|---|---|---|
 | | | | |
 ```
 
-## 작성 시 주의사항
+## Notes for writing this document
 
-- 수치(최대 n줄, n개)는 반드시 명시. 근거를 못 찾으면 `[확인 필요]`, 그런 제약 자체가 없다고 코드/구현으로 확인되면 `[확인됨: 없음]`으로 구분해서 표기 (둘을 같은 걸로 뭉개지 않는다)
-- 클라이언트별 차이는 표로 정리
-- 공통 규칙은 링크로 참조, 예외만 해당 문서에 기재
-- 빈 상태(Empty State)는 항상 정의
+- Always specify numbers (max n lines, n items). Mark `[needs confirmation]` if you can't find evidence, and `[confirmed: absent]` if code/implementation confirms the constraint simply doesn't exist (don't collapse the two into one)
+- Organize per-client differences into a table
+- Reference common rules via a link; only note exceptions in this document
+- Always define the empty state

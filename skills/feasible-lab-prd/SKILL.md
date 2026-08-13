@@ -1,395 +1,395 @@
 ---
 name: feasible-lab-prd
 description: |
-  피저블랩 PRD Draft 작성 스킬. 새 기능이나 프로젝트의 기획 의도를 설명하면, 피저블랩의 AC 중심 PRD 형식(7개 섹션 + Q&A, 흐름-AC 통합, UI & 정책 기능 단위 통합)에 맞는 마크다운 PRD 초안(Draft)을 즉시 생성한다.
+  Feasible Lab PRD draft-writing skill. Describe the intent behind a new feature or project, and it immediately produces a Markdown PRD draft in Feasible Lab's AC-centric format (7 sections + Q&A, flow-and-AC merged together, UI and policy merged per feature).
 
-  PM은 WHAT(AC·정책·흐름)을 정의하고, 기술 구현 방식(아키텍처·API·DB 스키마)은 개발팀이 AC를 보고 결정한다.
+  The PM defines the WHAT (AC, policy, flow); the engineering team decides the HOW (architecture, API design, DB schema) by reading the AC.
 
-  다음 상황에서 반드시 이 스킬을 사용하라:
-  - "PRD 써줘", "PRD draft 만들어줘", "기획서 초안 잡아줘" 등 PRD/기획 문서 작성 요청
-  - 새 기능의 스펙, 플로우, 정책을 처음 정리해달라는 요청
-  - "PRD 형식으로", "피저블랩 형식으로" 문서 작성 요청
-  - 기획 → 개발 첫 논의 준비를 위한 문서 작성 요청
-  - 기존 PRD draft 섹션 보완/업데이트 요청
+  Use this skill whenever:
+  - Someone asks for a PRD or planning draft ("write a PRD", "make a PRD draft", "put together a planning draft")
+  - Someone asks you to lay out the spec, flow, and policy for a new feature for the first time
+  - Someone asks for a document "in PRD format" or "in Feasible Lab format"
+  - A document is needed to kick off the first planning-to-engineering discussion
+  - An existing PRD draft section needs to be filled in or updated
 ---
 
-# 피저블랩 PRD Draft 작성 스킬
+# Feasible Lab PRD Draft-Writing Skill
 
-## 이 스킬의 목적
+## What this skill is for
 
-피저블랩의 PRD Draft는 **"개발팀이 바로 첫 논의에 들어갈 수 있는 출발점 문서"** 다. 완성된 스펙이 아니라 기획 의도와 방향을 공유하고 논의를 시작하기 위한 초안이다.
+A Feasible Lab PRD draft is **the starting document engineering can walk straight into a first discussion with**. It isn't a finished spec — it's a draft meant to share planning intent and direction and kick off a conversation.
 
-**핵심 원칙: PM은 WHAT, 개발팀은 HOW**
-- PM이 정의하는 것: 배경·목적, 스코프, 사용자 흐름, Acceptance Criteria, UI 구성, 정책
-- 개발팀이 정의하는 것: 시스템 아키텍처, API 설계, DB 스키마
-- 이유: PM이 기술 스펙을 선제 정의하면 개발자가 그 틀에 끌려가거나, 잘못된 가정을 고치는 비용이 발생한다
-
----
-
-## 사전 인터뷰 (작성 전 반드시 파악할 것)
-
-PRD를 작성하기 전에 아래 정보를 파악하라. 이미 대화에서 충분히 설명된 내용은 다시 묻지 말고 작성에 반영하라.
-
-**필수 파악 항목:**
-1. **기능/프로젝트 이름** — PRD 제목(노션 페이지 제목)에 사용
-2. **해결하려는 문제 또는 목적** — 섹션 1 작성에 사용
-3. **주요 사용자 흐름** — 섹션 3 작성에 사용
-4. **피그마 링크** (있으면) — 문서 헤더와 섹션 4에 연결
-5. **Linear 프로젝트 링크** (있으면) — 문서 헤더에 연결
-
-정보가 불충분하면 **작성 전에 먼저 질문**하고, 답변 후 작성하라. 중간에 멈추고 묻지 말 것.
+**Core principle: PM owns WHAT, engineering owns HOW**
+- What the PM defines: background/purpose, scope, user flow, Acceptance Criteria, UI composition, policy
+- What engineering defines: system architecture, API design, DB schema
+- Why: if the PM predefines technical specs, engineers either get dragged into that frame or end up paying the cost of correcting wrong assumptions
 
 ---
 
-## PRD 표기 규칙
+## Pre-writing interview (always gather this before writing)
 
-| 표기 | 의미 |
+Before writing the PRD, gather the information below. If something has already been covered sufficiently in conversation, don't ask again — just use it.
+
+**Must-have items:**
+1. **Feature/project name** — used for the PRD title (the Notion page title)
+2. **The problem being solved, or the purpose** — used to write Section 1
+3. **The main user flow** — used to write Section 3
+4. **Figma link** (if any) — linked in the document header and Section 4
+5. **Linear project link** (if any) — linked in the document header
+
+If the information is insufficient, **ask before writing**, then write once you have the answer. Don't stop midway to ask.
+
+---
+
+## PRD notation rules
+
+| Notation | Meaning |
 |---|---|
-| `TBD` | 수치/세부 내용 미확정 |
-| `이후 정의` | 현재 개발 대상 아님 (Not Doing 목록에 명시) |
+| `TBD` | Number/detail not yet finalized |
+| `Defined later` | Not in scope for the current build (call it out in the Not Doing list) |
 
-**금지 표기:**
-- ✅ / 🔲 같은 상태 마커 — 문서가 무거워지고 생각이 분산된다
-- 픽셀·치수 스펙 — 피그마가 SSOT, PRD에 넣으면 이중 관리 발생
-- PlantUML 다이어그램 — 흐름은 텍스트 스텝으로 작성
+**Prohibited notation:**
+- Status markers like ✅ / 🔲 — they make the document heavier and scatter attention
+- Pixel/dimension specs — Figma is the source of truth; putting them in the PRD creates dual maintenance
+- PlantUML diagrams — write flows as text steps instead
 
 ---
 
-## 문서 헤더
+## Document header
 
-노션에 바로 복붙할 수 있는 형식이다. H1 문서 타이틀은 쓰지 않는다 (노션 페이지 제목으로 입력).
+Written so it can be pasted straight into Notion. Don't write an H1 document title (that goes in the Notion page title field instead).
 
 ```markdown
-Linear: [링크 또는 TBD]
-피그마: [링크 또는 TBD]
-작성일: [날짜] | 작성자: [이름] | 상태: Draft v0.1
+Linear: [link or TBD]
+Figma: [link or TBD]
+Date: [date] | Author: [name] | Status: Draft v0.1
 
 ---
 ```
 
 ---
 
-## PRD 문서 구조 (7개 섹션 + Q&A)
+## PRD document structure (7 sections + Q&A)
 
-노션 heading 형식: `##`(H2) → `#`(H1), `###`(H3) → `##`(H2) 로 한 단계씩 당겨 사용한다.
+Notion heading convention: shift each heading level up by one — `##` (H2) becomes `#` (H1), `###` (H3) becomes `##` (H2).
 
 ---
 
-### 섹션 1. 배경
+### Section 1. Background
 
-한 줄로 이 기능이 해결하는 것을 설명하고, 이유를 3줄 이내로 압축한다.
+Explain in one line what this feature solves, and compress the reasoning into 3 lines or fewer.
 
 ```markdown
-# 1. 배경
+# 1. Background
 
-[이 기능이 해결하는 것을 한 문장으로]
+[What this feature solves, in one sentence]
 
-1. [이유 1]
-2. [이유 2]
-3. [이유 3]
+1. [Reason 1]
+2. [Reason 2]
+3. [Reason 3]
 
-| 타겟 | 설명 |
+| Target | Description |
 |---|---|
-| [사용자 유형 1] | [설명] |
-| [사용자 유형 2] | [설명] |
+| [User type 1] | [Description] |
+| [User type 2] | [Description] |
 ```
 
 ---
 
-### 섹션 2. 스코프
+### Section 2. Scope
 
-**Not Doing 없이는 PRD가 불완전하다.** 개발 중 범위 논쟁을 막는 핵심 장치다.
+**A PRD without a Not Doing list is incomplete.** It's the key mechanism that prevents scope arguments mid-build.
 
 ```markdown
-# 2. 스코프
+# 2. Scope
 
 ## Outcome
 
-1. [달성 목표 1]
-2. [달성 목표 2]
+1. [Goal 1]
+2. [Goal 2]
 
 ## Output
 
-| 분류 | 산출물 |
+| Category | Deliverable |
 |---|---|
-| 개념 변경 | [내용] |
-| 신규 기능 | [내용] |
-| 신규 정책 | [내용] |
-| UI 변경 | [내용] |
+| Concept change | [Description] |
+| New feature | [Description] |
+| New policy | [Description] |
+| UI change | [Description] |
 
 ## Not Doing
 
-- [제외 항목 1]
-- [제외 항목 2]
+- [Excluded item 1]
+- [Excluded item 2]
 ```
 
 ---
 
-### 섹션 3. 사용자 흐름 & Acceptance Criteria
+### Section 3. User Flow & Acceptance Criteria
 
-**흐름과 AC를 함께 작성한다.** 각 흐름 바로 아래에 AC를 붙여 연결성을 유지한다.
+**Write flow and AC together.** Attach the AC directly under each flow to keep the connection visible.
 
-흐름 번호는 `3-1`, `3-2` 형식으로, Linear 이슈와 1:1 대응한다.
+Number flows as `3-1`, `3-2`, etc., matching Linear issues 1:1.
 
-**인크리먼털 원칙:** 각 흐름은 해당 시점에 새롭게 도입되는 것만 정의한다. 이후 흐름에서 소개될 개념을 앞 흐름의 AC에 포함하지 않는다.
+**Incremental principle:** each flow defines only what's newly introduced at that point. Don't fold concepts from a later flow into an earlier flow's AC.
 
-**흐름 작성 기준:**
-- 명사형·축약형으로 작성 ("사용자가 클릭한다" → "클릭")
-- 에러 케이스는 User Flow 스텝 안에 포함
-- 기술 용어(API 호출, DB 저장 등) 제외
+**Flow-writing rules:**
+- Write as noun phrases / abbreviated form ("the user clicks" → "click")
+- Include error cases inside the User Flow steps
+- Exclude technical terms (API calls, DB writes, etc.)
 
-**AC 작성 원칙:**
-- 동사로 끝나는 관찰 가능한 결과로 작성
-- 하나의 AC = 하나의 검증 가능한 조건
-- 에러 케이스·엣지 케이스도 포함
-- 기술 구현 내용(API·DB) 포함 금지
+**AC-writing principles:**
+- Write as an observable outcome ending in a verb
+- One AC = one verifiable condition
+- Include error cases and edge cases
+- Never include technical implementation details (API, DB)
 
 ---
 
-**섹션 3 인덴트 규칙**
+**Section 3 indentation convention**
 
 ```
-## 3-X. [흐름 이름]          ← H2: 흐름 제목
+## 3-X. [Flow name]          ← H2: flow title
 
-[정책·맥락 설명]              ← 흐름 전제 조건이나 정책 (있을 경우만)
+[Policy/context notes]        ← preconditions or policy for the flow (only if applicable)
 
-### User Flow                 ← H3: 유저 흐름
+### User Flow                 ← H3: user flow
 
-**[서브 흐름명]**             ← Bold: 서브 흐름 구분 (생성/편집/삭제, Bulk/개별 등, 없으면 생략)
+**[Sub-flow name]**           ← Bold: distinguishes a sub-flow (create/edit/delete, bulk/single, etc. — omit if not applicable)
 
-1. [액션]
-2. [시스템 반응]
-   - 성공 → [결과]
-   - 실패 → [에러 처리]
+1. [Action]
+2. [System response]
+   - Success → [Result]
+   - Failure → [Error handling]
 
-### Acceptance Criteria       ← H3: 인수 조건
+### Acceptance Criteria       ← H3: acceptance criteria
 
-**[서브 흐름명]**             ← Bold: User Flow 서브 흐름과 동일하게 구분 (있을 경우만)
+**[Sub-flow name]**           ← Bold: matches the sub-flow split in User Flow (only if applicable)
 
-- [ ] [조건일 때 결과가 된다]
-- [ ] [에러 상황이면 처리가 된다]
+- [ ] [Given this condition, this result happens]
+- [ ] [Given this error, this handling happens]
 ```
 
-**기본 흐름 (서브 없음):**
+**Basic flow (no sub-flows):**
 
 ```markdown
-## 3-1. [흐름 이름]
+## 3-1. [Flow name]
 
-[정책·맥락 설명 — 있을 경우만]
+[Policy/context notes — only if applicable]
 
 ### User Flow
 
-1. [액션]
-2. [시스템 반응]
-3. [결과]
-   - 성공 → [결과]
-   - 실패 → [에러 처리]
+1. [Action]
+2. [System response]
+3. [Result]
+   - Success → [Result]
+   - Failure → [Error handling]
 
 ### Acceptance Criteria
 
-- [ ] [조건일 때 결과가 된다]
-- [ ] [에러 상황이면 처리가 된다]
-- [ ] [엣지 케이스일 때 동작한다]
+- [ ] [Given this condition, this result happens]
+- [ ] [Given this error, this handling happens]
+- [ ] [Given this edge case, this behavior happens]
 ```
 
-**서브 흐름 있는 경우 (생성·편집·삭제, Bulk·개별 등):**
+**With sub-flows (create/edit/delete, bulk/single, etc.):**
 
 ```markdown
-## 3-3. [흐름 이름]
+## 3-3. [Flow name]
 
 ### User Flow
 
-**[서브 흐름 A]**
+**[Sub-flow A]**
 
-1. [액션]
-2. [결과]
+1. [Action]
+2. [Result]
 
-**[서브 흐름 B]**
+**[Sub-flow B]**
 
-1. [액션]
-2. [결과]
+1. [Action]
+2. [Result]
 
 ### Acceptance Criteria
 
-**[서브 흐름 A]**
+**[Sub-flow A]**
 
-- [ ] [조건]
+- [ ] [Condition]
 
-**[서브 흐름 B]**
+**[Sub-flow B]**
 
-- [ ] [조건]
+- [ ] [Condition]
 ```
 
-**좋은 AC 예시:**
+**Good AC examples:**
 ```
-- [ ] 이름 미입력 시 생성이 막힌다
-- [ ] 이름 중복 시 에러 메시지가 표시되고 생성이 막힌다
-- [ ] 생성 성공 시 빈 상세 화면으로 이동한다
+- [ ] Creation is blocked when the name field is empty
+- [ ] An error message is shown and creation is blocked on a duplicate name
+- [ ] A successful creation navigates to an empty detail screen
 ```
 
-**나쁜 AC 예시:**
+**Bad AC examples:**
 ```
-- [ ] Collection이 잘 생성된다          ← 모호
-- [ ] POST /collections API를 호출한다  ← 기술 구현 (개발팀 영역)
-- [ ] DB에 저장된다                     ← 기술 구현 (개발팀 영역)
-- [ ] [이후 흐름의 개념]이 적용된다    ← 인크리먼털 위반
+- [ ] Collection gets created properly          ← too vague
+- [ ] Calls the POST /collections API           ← technical implementation (engineering's territory)
+- [ ] Gets saved to the DB                       ← technical implementation (engineering's territory)
+- [ ] [A concept from a later flow] gets applied  ← violates the incremental principle
 ```
 
 ---
 
-### 섹션 4. UI & 정책 정의
+### Section 4. UI & Policy Definition
 
-**기능 단위로 UI 구성과 정책을 함께 작성한다.** 같은 기능을 볼 때 두 섹션을 왔다갔다 하지 않아도 된다.
+**Write UI composition and policy together, per feature.** This way readers don't have to bounce between two sections to understand the same feature.
 
-- UI 시각 스펙(레이아웃·컴포넌트·색상 수치)은 피그마가 SSOT → 링크만 명시
-- 에러 메시지는 마지막 서브섹션에 전체 통합
+- Figma is the source of truth for UI visual specs (layout, components, color values) — just link to it
+- Consolidate error messages into a single subsection at the end
 
 ```markdown
-# 4. UI & 정책 정의
+# 4. UI & Policy Definition
 
-UI 시각 스펙(레이아웃·컴포넌트·색상)은 피그마 참고
-[피그마 링크]
-
----
-
-## 4-1. [기능/화면 이름]
-
-**UI 구성**
-
-- [화면 요소 1]
-- [화면 요소 2]
-
-**[관련 메뉴/컴포넌트] (있을 경우)**
-
-| 항목 | 설명 |
-|---|---|
-| [항목] | [설명] |
-
-**[정책명]**
-
-| 항목 | 정책 |
-|---|---|
-| [항목] | [정책 내용] |
+See Figma for UI visual specs (layout, components, colors)
+[Figma link]
 
 ---
 
-## 4-2. [기능/화면 이름]
+## 4-1. [Feature/screen name]
+
+**UI composition**
+
+- [Screen element 1]
+- [Screen element 2]
+
+**[Related menu/component] (if applicable)**
+
+| Item | Description |
+|---|---|
+| [Item] | [Description] |
+
+**[Policy name]**
+
+| Item | Policy |
+|---|---|
+| [Item] | [Policy content] |
+
+---
+
+## 4-2. [Feature/screen name]
 
 ...
 
 ---
 
-## 4-N. 에러 메시지
+## 4-N. Error messages
 
-| 케이스 | 메시지 | 노출 위치 | 액션 |
+| Case | Message | Where it appears | Action |
 |---|---|---|---|
-| [에러 상황] | [메시지 문구] | [노출 위치] | [Undo/Close 등] |
-| [에러 상황] | TBD | TBD | TBD |
+| [Error condition] | [Message copy] | [Location] | [Undo/Close/etc.] |
+| [Error condition] | TBD | TBD | TBD |
 ```
 
 ---
 
-### 섹션 5. Phase 계획
+### Section 5. Phase Plan
 
-개발팀과 첫 스펙 미팅 후 기술 의존성·배포 단위 기준으로 정의한다. 스펙 미팅 전에는 플레이스홀더로 남긴다.
+Define this after the first spec meeting with engineering, based on technical dependencies and deployment units. Leave it as a placeholder before that meeting.
 
 ```markdown
-# 5. Phase 계획
+# 5. Phase Plan
 
-개발팀과 첫 스펙 미팅 후 기술 의존성·배포 단위 기준으로 정의 예정
+To be defined after the first spec meeting with engineering, based on technical dependencies and deployment units
 ```
 
-스펙 미팅 후 표로 전환:
+Convert to a table after the spec meeting:
 
 ```markdown
-# 5. Phase 계획
+# 5. Phase Plan
 
-| Phase | 목표 | 핵심 산출물 | Linear 마일스톤 |
+| Phase | Goal | Key deliverables | Linear milestone |
 |---|---|---|---|
-| Phase 1 | [목표] | [산출물] | TBD |
-| Phase 2 | [목표] | [산출물] | TBD |
+| Phase 1 | [Goal] | [Deliverable] | TBD |
+| Phase 2 | [Goal] | [Deliverable] | TBD |
 ```
 
 ---
 
-### 섹션 6. KPI
+### Section 6. KPI
 
-서비스 릴리즈 및 파일럿 운영 후 실데이터 기반으로 정의한다. 릴리즈 전에는 플레이스홀더로 남긴다.
+Define this using real data after release and pilot operation. Leave it as a placeholder before release.
 
 ```markdown
 # 6. KPI
 
-서비스 릴리즈 및 파일럿 운영 후 실데이터 기반으로 정의 예정
+To be defined using real data after release and pilot operation
 ```
 
-릴리즈 후 표로 전환:
+Convert to a table after release:
 
 ```markdown
 # 6. KPI
 
-| 주요 성과 | 검증 지표 | 목표 수치 |
+| Key outcome | Metric | Target |
 |---|---|---|
-| [성과 이름] | [측정 가능한 지표] | TBD |
+| [Outcome name] | [Measurable metric] | TBD |
 ```
 
 ---
 
-### 섹션 7. Q&A
+### Section 7. Q&A
 
-논의 중 나온 미결 질문이나 결정 사항을 기록한다.
+Record open questions or decisions that came up during discussion.
 
 ```markdown
 # 7. Q&A
 
 | | Question | Answer |
 |---|---|---|
-| 1 | [질문] | [답변 또는 TBD] |
+| 1 | [Question] | [Answer or TBD] |
 | 2 | | |
 ```
 
 ---
 
-## Draft 완성 후 체크리스트
+## Checklist after finishing a draft
 
 ```
-[ ] 문서 헤더: 피그마 링크, Linear 링크 포함 (없으면 TBD)
-[ ] H1 문서 타이틀 없음 (노션 페이지 제목으로 입력)
-[ ] 섹션 1: 배경 한 문장 요약 + 타겟 표
-[ ] 섹션 2: Outcome / Output / Not Doing 모두 작성
-[ ] 섹션 3: 흐름 + AC 통합, 에러 케이스 포함
-[ ] 섹션 4: 피그마 링크 + 기능별 UI & 정책 + 에러 메시지 통합
-[ ] 섹션 5: Phase 플레이스홀더 또는 표
-[ ] 섹션 6: KPI 플레이스홀더 또는 표
-[ ] 섹션 7: Q&A (없으면 빈 표라도 포함)
-[ ] ✅/🔲 마커 없는지 확인
-[ ] 픽셀·치수 스펙 없는지 확인 (피그마 링크로 대체)
-[ ] AC에 기술 구현 내용(API·DB) 없는지 확인
-[ ] AC가 명사형/동사형으로 통일되어 있는지 확인
+[ ] Document header includes Figma link and Linear link (TBD if none)
+[ ] No H1 document title (goes in the Notion page title instead)
+[ ] Section 1: one-sentence background summary + target table
+[ ] Section 2: Outcome / Output / Not Doing all written
+[ ] Section 3: flow and AC merged, error cases included
+[ ] Section 4: Figma link + per-feature UI & policy + consolidated error messages
+[ ] Section 5: Phase placeholder or table
+[ ] Section 6: KPI placeholder or table
+[ ] Section 7: Q&A included (even an empty table if there's nothing yet)
+[ ] Confirm there are no ✅/🔲 markers
+[ ] Confirm there are no pixel/dimension specs (replaced with a Figma link)
+[ ] Confirm AC contains no technical implementation details (API, DB)
+[ ] Confirm AC is consistently phrased as noun/verb form
 ```
 
 ---
 
-## Linear 이슈 구성 가이드
+## Linear issue structure guide
 
-PRD 흐름(3-X)과 Linear 이슈를 1:1로 대응시킨다.
+Map PRD flows (3-X) to Linear issues 1:1.
 
-**구조:**
-- **Project** = 기능 전체 (예: Collection)
-- **Issue** = 사용자 플로우 단위 (3-1~3-N), PRD 번호와 일치
-- **Sub-issue** = BE/FE 역할 분리 시 (개발팀이 자율적으로 생성)
+**Structure:**
+- **Project** = the whole feature (e.g. Collection)
+- **Issue** = one user-flow unit (3-1 through 3-N), matching the PRD numbering
+- **Sub-issue** = used when splitting BE/FE responsibilities (engineering creates these autonomously)
 - **Label** = `backend` / `frontend` / `policy` / `ui-change`
 
-**이슈 단위 기준:**
-- 같은 화면 안에서 밀접하게 연결된 흐름은 하나의 이슈로 묶는다
-- 인터랙션(액션)과 신규 페이지(화면 구성)는 유형이 달라 분리한다
-- BE 연동이 있는 흐름은 별도 이슈로 분리하는 것을 고려한다
+**Rules for sizing an issue:**
+- Group tightly-coupled flows within the same screen into a single issue
+- Separate interactions (actions) from new pages (screen composition) — they're different types of work
+- Consider splitting out flows that involve BE integration into their own issue
 
-**이슈 설명 템플릿:**
+**Issue description template:**
 ```
-PRD 참조: [3-X]
-피그마: [링크]
+PRD reference: [3-X]
+Figma: [link]
 
-[흐름 요약 1~2줄]
+[1-2 line flow summary]
 
 AC:
 - [ ] ...

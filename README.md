@@ -15,6 +15,7 @@ PM/QA workflows I've built and used while working on [Feasible Research](https:/
 | [`ai-usage-retro`](skills/ai-usage-retro/SKILL.md) | Evaluates your actual AI usage from real artifacts (not self-report) and turns it into an improvement loop matched against new capabilities | On a recurring cadence, to check whether your AI workflow is keeping up with what's now possible |
 | [`idea-prioritization`](skills/idea-prioritization/SKILL.md) | Filters ideas through a 4-axis qualitative check, then scores survivors with ICE/RICE | When you have several candidate ideas/backlog items and need to decide what to do first |
 | [`org-diagnosis-pivot`](skills/org-diagnosis-pivot/SKILL.md) | Two-phase: a 40-question diagnostic bank to turn a vague complaint into facts, then a pivot-decision frame to judge direction | Evaluating a company to join, clarifying a vague in-tenure complaint, or deciding whether a stalled product should pivot |
+| [`openclaw-usage-review`](skills/openclaw-usage-review/SKILL.md) | Reviews how you actually used OpenClaw this week and suggests features and settings to try, tells you what became usable after an upgrade, and keeps settings pinned to written reasons | When you self-host OpenClaw and suspect you're only using a fraction of it, or just upgraded and want to know what's new for you |
 
 Each skill's `SKILL.md` has the full procedure; some also ship templates under `references/`.
 

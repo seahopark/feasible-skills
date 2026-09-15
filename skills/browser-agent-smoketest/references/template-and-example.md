@@ -13,7 +13,8 @@
 ## A. Execution rules
 
 ### A-1. Result logging format
-Per step: step / verdict (binary pass/fail, when in doubt fail) / note (actual actions + observations only, no guessing/interpretation/suggestions)
+| Step | Verdict | Note | Evidence |
+Verdict is pass/fail/NT. Attempted but ambiguous → fail. Never attempted because an earlier step blocked it → NT (say what blocked it in the note). Notes are actual actions + observations only — no guessing, interpretation, or suggestions.
 
 ### A-2. Wait policy
 | Target | Poll interval | Timeout | Pass condition |
@@ -21,6 +22,11 @@ Timeout = log as failure and move to the next step. OK to work on other sections
 
 ### A-3. Side-effect guards
 Approver/assignee/mention targets all go to one fixed test account. Never touch existing data — only what this run created.
+Any step that changes a shared setting records the original value in the evidence column first, and the cleanup section's restore step puts it back and confirms.
+| Setting | Screen location | Original value (recorded at run time) | Test value | Restore step |
+
+### A-6. Evidence collection
+Failed/NT rows must carry an observed string (error message, toast, status label) or a screenshot in the evidence column. For passed rows, one line with the observed value that satisfied the pass condition is enough.
 
 ### A-4. Handling input fields (filled in from v2 onward)
 Traps hit with the tool itself while running, and the workaround. E.g., an alternative technique when a standard keyboard shortcut doesn't register.
@@ -55,12 +61,12 @@ Browser-agent/tool-limitation bugs found during an actual run, and how to work a
 ---
 
 ## E. Test order
-Per entity: create → verify → (next entity) → ... → cleanup (reverse creation order, delete children first, finish with a prefix search confirming zero results)
+Per entity: create → verify → (next entity) → ... → cross-module flow (one or two checks that an object created in one module shows up in another module's list/search/dashboard) → one permission-boundary check (does an account without permission get blocked? anything beyond that goes to regression) → cleanup (reverse creation order, delete children first, restore any changed settings, finish with a prefix search confirming zero results)
 
 ---
 
 ## F. Final output
-A per-step results table + a separate list of failures/unexpected behavior + flag any cleanup-step failure at the very top (it's a hard failure that blocks the next run)
+A per-step results table (with evidence) + a separate list of failed/NT rows + flag any cleanup-step failure (a failed delete or a failed setting restore) at the very top (it's a hard failure that blocks the next run). Split the failure list into "looks like an app defect" and "looks like a browser-agent/tool handling limitation," but the executor only records observations — final classification belongs to the spec author.
 ```
 
 ## What each section is for, illustrated with a worked example

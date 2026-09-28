@@ -35,6 +35,14 @@ Don't ask the person to describe their AI usage and analyze that description. Pu
 
 ---
 
+## Ground rules
+
+- **Read and suggest only.** Changes to settings, upgrades, restarts, deletions, and memory/notes files need the person's approval. The retro itself changes nothing except its own state file (below).
+- **Keep a do-not-repropose list.** Keep one small state file with the person's operating principles and a dated list of suggestions they rejected. Read it before proposing anything and drop matches. When the person's answer to the closing question rejects or corrects a suggestion, add it with the date and the reason. This is what stops the same suggestion coming back every week.
+- **Confirm before recommending.** Every suggested feature must be confirmed at its source (official docs or release page). Anything you couldn't confirm is labeled "unverified" and not recommended.
+
+---
+
 ## Process
 
 ### Step 1: Gather evidence
@@ -56,7 +64,7 @@ Compare current usage with capabilities that exist now but may not have when the
 
 **If you also run a tool-side review** (for example `openclaw-usage-review` for OpenClaw setups), read its latest report as one more evidence source and take at most one of its findings into this week's "things to try." The rest stays in the evidence section, so tool housekeeping doesn't crowd out the prompt suggestions. Say which date that report is from.
 
-Read release notes directly from official pages and include the source URL. If a search tool fails, fetch the official release page instead of retrying. Anything you could not read at its source is marked "unverified" and is not recommended. Model suggestions must not assert performance differences without evidence; with a small sample, phrase them as "try this and see."
+If a tool's version changed since the last retro, establish the previous and current versions and read every release note in between, not just the latest. Read release notes directly from official pages and include the source URL. If a search tool fails, fetch the official release page instead of retrying. Anything you could not read at its source is marked "unverified" and is not recommended. Model suggestions must not assert performance differences without evidence; with a small sample, phrase them as "try this and see."
 
 ### Step 4: Write the retro in five parts
 
@@ -76,7 +84,11 @@ Keep internal notation out of the message itself: no counts strings, file names,
 
 **Blind spots:** where there is no evidence, say so and ask; don't fill the gap with a guess. Common ones: conversations you could only read the tail of, tools whose history isn't accessible to you, and whether an output was actually used afterwards.
 
-### Step 6: Deliver it as written, and close the loop
+### Step 6: Verify before sending
+
+Pick two suggestions at random and recount the evidence behind each against the live source (for example, re-read the quoted message, re-count the conversations, re-check the date fields you relied on: use the timestamp that reflects real activity, not one that migrations or bulk updates rewrite). If the numbers or quotes don't match, fix them before sending. Confirm every feature you recommend has its source URL.
+
+### Step 7: Deliver it as written, and close the loop
 
 If the retro runs on a schedule, deliver the message directly through your messaging tool. Don't route it through another session that may paraphrase it or append unrelated events, and don't let progress narration ("collecting messages…") leak into the message. If sending fails, note that at the top of the saved file and in the final response.
 

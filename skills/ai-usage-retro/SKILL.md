@@ -13,6 +13,8 @@ Most people can't accurately describe their own AI usage. They know they used AI
 
 This skill is not an audit. It is a weekly (or monthly) feedback loop: read what actually happened, show the person one concrete moment where a prompt could have been better, suggest what to try next (a prompt change, a different model for a task, a newly released feature), and ask how last time's suggestions went. The goal is that the person learns what is possible and improves a little each cycle.
 
+**Relationship to `openclaw-usage-review`:** this skill is the follow-up to [`openclaw-usage-review`](../openclaw-usage-review/SKILL.md). That skill reviews the tool side (settings, sessions, versions) for OpenClaw setups. Running it showed that part of the problem was in how requests were being handed to the agent, so this skill reviews that side too and works with any agent. If you run a tool-side review as well, see the note in Step 3.
+
 Do not rank "what hurts most." Many people have no felt pain to point at. Lead with suggestions grounded in evidence. Things that are only precautionary (for example, a memory file growing toward a size limit) go in a separate "preventive" list, not mixed into what is going wrong.
 
 ---
@@ -51,6 +53,8 @@ Compare against the previous retro: did these go up or down?
 ### Step 3: Check against what's newly possible
 
 Compare current usage with capabilities that exist now but may not have when the person's habits formed: new features in the tools they already use, integrations or delegation patterns they have but don't use, manual workarounds for limits that no longer exist.
+
+**If you also run a tool-side review** (for example `openclaw-usage-review` for OpenClaw setups), read its latest report as one more evidence source and take at most one of its findings into this week's "things to try." The rest stays in the evidence section, so tool housekeeping doesn't crowd out the prompt suggestions. Say which date that report is from.
 
 Read release notes directly from official pages and include the source URL. If a search tool fails, fetch the official release page instead of retrying. Anything you could not read at its source is marked "unverified" and is not recommended. Model suggestions must not assert performance differences without evidence; with a small sample, phrase them as "try this and see."
 

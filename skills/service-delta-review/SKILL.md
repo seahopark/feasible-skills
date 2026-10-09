@@ -19,6 +19,8 @@ description: |
 
 The job is an observer. It reads new data, compares it with what it already knows, and reports only exceptions. It never changes the system it observes.
 
+"Delta" here means the user data that arrived since the last run, not code changes. To review a git diff for bugs, use `delta-bug-report` instead.
+
 ## Core principles
 
 - **Quality review, not uptime.** The target must persist something that reflects quality: AI responses, scores or verdicts, task outcomes, user feedback, funnel events. If nothing like that is stored, you need a health check, not this skill.

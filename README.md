@@ -19,6 +19,7 @@ PM/QA workflows I've built and used while working on [Feasible Research](https:/
 | [`openclaw-usage-review`](skills/openclaw-usage-review/SKILL.md) | Reviews how you actually used OpenClaw this week and suggests features and settings to try, tells you what became usable after an upgrade, and keeps settings pinned to written reasons | When you self-host OpenClaw and suspect you're only using a fraction of it, or just upgraded and want to know what's new for you |
 | [`ux-writing-brand-voice`](skills/ux-writing-brand-voice/SKILL.md) | Writes and reviews UI copy against 7 baseline guidelines, and runs a team workshop to define brand voice and tone (benchmark, interviews, core values, persona, channel messages) | When you write or review product copy, or a product has no voice document yet |
 | [`localization-system`](skills/localization-system/SKILL.md) | Designs a multi-language UI system (structure/rules/glossary split, key naming formula) and runs translate / review / Q&A with a 5-item checklist | When you set up localization, or translate and review UI strings consistently |
+| [`linear-sheets-gantt`](skills/linear-sheets-gantt/SKILL.md) | Explains the Google Sheets Gantt workaround for Linear's limited schedule views, states its limits (no planned start date), and builds the scheduled sync on request | When someone needs a date-based Gantt of Linear issues and the built-in views are not enough |
 
 Each skill's `SKILL.md` has the full procedure; some also ship templates under `references/`.
 

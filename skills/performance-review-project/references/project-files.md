@@ -38,6 +38,7 @@ Write the result to `reports/`.
 - Relevant work sources: [tools, documents, exports]
 - Relevant metric sources: [tools, documents, exports]
 - Known competing changes: [campaigns, pricing, seasonality, incidents, or unknown]
+- Review mode: [work-record / analytics / combined]
 
 ## Decisions
 
@@ -60,6 +61,7 @@ Write the result to `reports/`.
 - Aggregation: [count, average, rate, cohort, etc.]
 - Equivalent comparison: [pre/post, WoW, MoM, cohort]
 - Known instrumentation gaps: [gaps]
+- Retrieval status convention: [access failure / query failure / no data / not instrumented / observed zero]
 ```
 
 ## sources.md
@@ -75,5 +77,12 @@ Write the result to `reports/`.
 - Read-only sources: [list]
 - Sensitive fields excluded: [list]
 - Approved data boundary: [description]
-```
 
+## Optional project-to-metric mapping
+
+Use only when a combined review is needed. If the sources cannot be joined reliably, leave this
+section empty and report the sources independently.
+
+| Work-record project | Customer-facing change date | Analytics event or metric | Expected change | Evidence |
+| --- | --- | --- | --- | --- |
+```

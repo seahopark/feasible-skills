@@ -4,19 +4,23 @@ These prompts are deliberately written without vendor-specific tool names. In Cl
 save them under the project and optionally reference them from `CLAUDE.md`. Codex, OpenClaw, and
 other agents can use the same files.
 
-## First run
+## First run: independent review
 
 ```text
-You are reviewing one project. Read PROJECT.md, metrics.md, and sources.md first.
+You are reviewing one project. Read PROJECT.md, metrics.md, and sources.md first. Use the review
+mode recorded in PROJECT.md. If only one source is available, review that source independently;
+do not block the review waiting for the other source.
 
 Do the following:
 1. Restate the project problem and hypothesis in one paragraph. Ask about only facts that are
    necessary to interpret the review.
 2. Identify the agreed metrics and their exact definitions, populations, periods, filters,
    aggregation, and timezone.
-3. Read the work-record source and analytics source using read-only access.
-4. Compare the agreed equivalent windows and record the source conditions for every number.
-5. Separate observations, possible explanations, and unknowns.
+3. Read only the source needed for this review using read-only access. Record whether the source
+   was reachable, the query succeeded, data was returned, and the relevant event or field existed.
+4. Record the source conditions for every material number.
+5. Separate observations, possible explanations, and unknowns. Include customer learning and
+   failed or incomplete attempts when the records support them.
 6. Write reports/YYYY-MM-DD.md with a conclusion first, followed by evidence, caveats, and next
    checks.
 
@@ -24,11 +28,33 @@ Do not choose substitute metrics without labeling them. Do not claim causation f
 change alone. If a number cannot be reproduced, mark it unverified.
 ```
 
+## Combined review
+
+```text
+Review this project using PROJECT.md, metrics.md, sources.md, and the optional source mapping.
+
+First produce understandable independent sections for the work records and analytics. Only then
+compare them using an explicit project/change identifier or a manually confirmed mapping. Record
+the customer-facing release date and timezone, the analytics event or metric, the expected change,
+the comparison windows, and competing changes.
+
+Keep these separate:
+- work completed;
+- product or policy change;
+- measured outcome;
+- possible explanation;
+- customer learning;
+- what remains unknown.
+
+Date overlap alone is not evidence of causation. If the sources cannot be mapped reliably, report
+them independently and state the missing join key, release record, event, or comparison needed.
+```
+
 ## Weekly review
 
 ```text
 Review this project's latest period using PROJECT.md, metrics.md, sources.md, the previous report,
-and the connected read-only sources.
+and the connected read-only source for the selected review mode.
 
 Return:
 - one-line conclusion;
@@ -37,6 +63,7 @@ Return:
   and source;
 - meaningful changes only;
 - competing explanations and data gaps;
+- customer or user learning, including failed or incomplete attempts;
 - decisions or checks for the next period.
 
 Use the same metric definitions as the previous report. Do not silently change a period, filter,

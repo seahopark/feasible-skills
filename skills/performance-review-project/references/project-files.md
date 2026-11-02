@@ -32,6 +32,7 @@ Write the result to `reports/`.
 - Project: [name]
 - Owner: [name or role]
 - Review period: [dates]
+- Company/team goal and connection: [goal this project supports and why]
 - Problem: [what problem this project addresses]
 - Hypothesis: [if we do X, Y will change because Z]
 - Hypothesis source: [project page / user confirmation; original or retrospective]
@@ -57,9 +58,11 @@ Write the result to `reports/`.
 
 - Hypothesis: [confirmed hypothesis]
 - Success behavior: [customer behavior that represents success]
+- Preceding key behaviors: [few actions that may lead to the success outcome]
 - Selected events and rationale: [why each event indicates success or a step toward it]
 - Event recheck: [meaning and collection checked; gaps or proxy limitations]
 - View: [trend / step comparison / breakdown]
+- First-run view check: [pending / reviewed; can it answer the hypothesis, what is missing?]
 - Reproducible query or instructions: [request or retrieval steps]
 - Saved GA exploration: [link if actually created; otherwise not created]
 

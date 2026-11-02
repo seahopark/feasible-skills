@@ -12,12 +12,16 @@ mode recorded in PROJECT.md. If only one source is available, review that source
 do not block the review waiting for the other source.
 
 Do the following:
-1. Restate the project problem and hypothesis in one paragraph. Ask about only facts that are
+1. Restate the company/team goal, project problem, hypothesis, and expected contribution in one
+   paragraph. Read existing records first; ask about only facts that are
    necessary to interpret the review.
 2. For work records, read the project's explicit hypothesis, execution, release dates, and role.
    For analytics, ask what customer behavior means success and which events indicate it. Recheck
    that the event meaning and collection fit that behavior before choosing metrics. Save and run
    a repeatable view with the selected events, period, filters, comparison, and query in metrics.md.
+   Separate the success outcome from the few preceding behaviors that might lead to it. Show the
+   first result and check with the user whether it answers the hypothesis and whether a key
+   behavior or comparison is missing. Record the view's limits and refine it before routine reuse.
    If the hypothesis is missing in either mode, confirm it with the user rather than inventing it.
 3. Read only the source needed for this review using read-only access. Record whether the source
    was reachable, the query succeeded, data was returned, and the relevant event or field existed.
@@ -61,6 +65,7 @@ and the connected read-only source for the selected review mode.
 
 Return the following as applicable to the selected mode:
 - one-line conclusion;
+- what the evidence says about the hypothesis and its contribution to the company/team goal;
 - work completed or changed since the previous review;
 - each agreed metric with current value, comparison value, period, filter, denominator, timezone,
   and source;

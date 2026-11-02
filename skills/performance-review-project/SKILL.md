@@ -19,8 +19,11 @@ or another agent can read the same files and follow the same prompts.
 
 ## Start here
 
-The central workflow is hypothesis → success behavior → suitable events → repeatable analysis
-view → results and learning. Independent use means independent sources, not analysis without a
+The central workflow is company/team goal → hypothesis → success outcome and preceding key
+behaviors → suitable events → validated analysis view → results and learning.
+Read the goal from existing records or ask which goal this project supports and why. Do not
+equate an intermediate gain, such as signups, with a downstream goal, such as retention.
+Independent use means independent sources, not analysis without a
 hypothesis. Keep the workflow small; ask only questions needed for this loop.
 
 First choose Linear/work records, GA/analytics, or both. Read the selected source's reference.

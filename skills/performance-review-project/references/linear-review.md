@@ -6,6 +6,8 @@ supports an independent work-record review; an analytics source is not required.
 ## Review sequence
 
 The hypothesis is required. Read it from the project page or linked planning document first.
+Read the company/team goal it supports and the expected connection to that goal. If the connection
+is missing, ask rather than inferring it from the project's completed work.
 If it is missing, ask the user to clarify it rather than filling it from completed issues.
 Label any hypothesis agreed now as retrospective, not as the original plan. This review can
 finish with hypothesis, execution, achievements, failures, and learning without GA access.

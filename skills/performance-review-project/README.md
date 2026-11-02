@@ -2,9 +2,11 @@
 
 ## Goal
 
-Start from a confirmed hypothesis. In Linear, review the hypothesis and what was executed.
+Start from a company/team goal and a confirmed hypothesis. In Linear, review that connection and what was executed.
 In GA, define success behavior, select and recheck the events that represent it, and create a
-repeatable analysis view. Either source works independently; compare them when evidence supports
+repeatable analysis view showing the success outcome and relevant preceding behaviors. Check the
+first result with the user to see whether it answers the hypothesis before routine reuse.
+Either source works independently; compare them when evidence supports
 the connection. Finish with achievements, failed attempts, and what was learned.
 
 Creates a project directory where an AI agent can independently review work records or analytics,

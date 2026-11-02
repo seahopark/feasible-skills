@@ -8,9 +8,16 @@ required.
 
 Before querying, read the recorded hypothesis or confirm one with the user. Ask:
 
+- Which company/team goal does this hypothesis support, and how?
 - What customer behavior would represent success for this product or hypothesis?
 - Which event could show that behavior, and why is it more useful than a general visit or click?
 - Is it the success itself or only a step that might lead to success?
+
+Pair the success outcome with the few preceding behaviors relevant to the hypothesis. For example,
+viewing guidance and completing signup answer different questions. Review both when available,
+without treating increased guidance views as proof of increased signups or retention. Separate
+event totals alone do not establish that the same users progressed or that one behavior caused
+the outcome; leave that relationship unresolved if the available query cannot establish it.
 
 Do not select events merely because they are available or have increased. Check their actual
 meaning, parameters, and collection against the intended behavior. If the event is unsuitable,
@@ -65,8 +72,10 @@ GA can be used independently to create a view for this hypothesis. Save the defi
 period, comparison, filters, and a reproducible query or query instructions. Choose a simple trend,
 step comparison, or breakdown that answers the question; do not build a dashboard by default.
 
-Run it once and show the resulting table or chart. Recheck with the user whether it actually
-answers the hypothesis, then reuse the definition for later reviews. Changing the event selection
+Run it once and show the resulting table or chart. Ask whether it helps judge the hypothesis and
+its contribution to the goal, and whether a key behavior or comparison is missing. Record what
+the view can and cannot answer, adjust it if needed, then reuse the agreed definition for later
+reviews. Do not claim this first-run check is complete before it has happened. Changing the event selection
 requires recording why; it must not silently break comparisons.
 
 A saved analysis definition and report are not a saved GA interface exploration. If the user

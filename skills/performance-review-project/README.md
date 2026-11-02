@@ -2,6 +2,11 @@
 
 ## Goal
 
+Start from a confirmed hypothesis. In Linear, review the hypothesis and what was executed.
+In GA, define success behavior, select and recheck the events that represent it, and create a
+repeatable analysis view. Either source works independently; compare them when evidence supports
+the connection. Finish with achievements, failed attempts, and what was learned.
+
 Creates a project directory where an AI agent can independently review work records or analytics,
 then optionally compare them using explicit project mappings. The project files are agent-agnostic;
 Claude Code is used as the concrete example, but the same workspace can be opened by Codex,

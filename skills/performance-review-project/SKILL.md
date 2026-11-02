@@ -19,13 +19,28 @@ or another agent can read the same files and follow the same prompts.
 
 ## Start here
 
+The central workflow is hypothesis → success behavior → suitable events → repeatable analysis
+view → results and learning. Independent use means independent sources, not analysis without a
+hypothesis. Keep the workflow small; ask only questions needed for this loop.
+
+First choose Linear/work records, GA/analytics, or both. Read the selected source's reference.
+Find the hypothesis in the existing project page or notes before asking the user. If absent,
+ask what change is expected and why; confirm it before interpreting success. Never invent a
+historical hypothesis or present a newly agreed hypothesis as a past decision.
+
+For Linear, the project page covers the problem, hypothesis, execution, release, and role.
+For GA, ask what customer behavior represents success and which events could indicate it.
+Recheck event meaning and actual collection, then build a reusable analysis view in `metrics.md`.
+GA needs no Linear mapping to do this. A work-record-only review needs no GA metrics to proceed.
+
 When the user asks to start this workflow, do not begin by collecting every available record or metric.
 First identify:
 
 1. The project and the decision it is meant to support.
 2. The problem, hypothesis, and expected change.
 3. The release or change date, if there is one.
-4. The two or three metrics that would show whether the expected change occurred.
+4. For analytics: the success behavior, candidate events, and the few metrics needed to test the
+   hypothesis. For work-record-only review, do not require analytics definitions.
 5. Which review mode is needed:
    - **Work-record review:** inspect Linear, another task system, local files, or manual notes.
    - **Analytics review:** inspect GA4, another analytics source, exports, or manual reports.
@@ -47,6 +62,10 @@ project-performance-review/
 ├── sources.md
 └── reports/
 ```
+
+Create `metrics.md` when analytics is in scope. README and saved prompt files are optional.
+On subsequent runs read only files relevant to the selected mode; missing analytics files must
+not block a Linear-only review.
 
 Use the templates in:
 
@@ -99,7 +118,8 @@ do not compare them until each source section is independently understandable.
 ### Weekly or monthly review
 
 Use the same prompt and metric definitions each time. The default cadence is weekly when the
-project changes quickly and monthly when the signal is slow. Each report should include:
+project changes quickly and monthly when the signal is slow. Include the following where relevant
+to the selected mode; do not require unavailable sources:
 
 - what changed in the work record;
 - the agreed metrics, periods, filters, and values;
@@ -147,7 +167,10 @@ runner command change.
 
 ## Output
 
-Write a concise report to `reports/YYYY-MM-DD.md` or the project’s existing naming convention.
+Write a concise report to `reports/YYYY-MM-DD-mode.md` or the project’s existing naming convention.
+Preserve earlier reports when rerunning. Close with what was expected, what was achieved, what
+failed or remains unknown, what was learned, and the next hypothesis or check. Ground learning in
+the records, not generic lessons or inferred customer motives.
 Keep the report useful to a decision-maker: conclusion first, then the evidence and caveats. Do
 not claim success merely because activity was recorded. The report should make clear what changed,
 what did not, and what remains unknown.

@@ -7,21 +7,24 @@ other agents can use the same files.
 ## First run: independent review
 
 ```text
-You are reviewing one project. Read PROJECT.md, metrics.md, and sources.md first. Use the review
+You are reviewing one project. Read PROJECT.md and sources.md, plus metrics.md for analytics. Use the review
 mode recorded in PROJECT.md. If only one source is available, review that source independently;
 do not block the review waiting for the other source.
 
 Do the following:
 1. Restate the project problem and hypothesis in one paragraph. Ask about only facts that are
    necessary to interpret the review.
-2. Identify the agreed metrics and their exact definitions, populations, periods, filters,
-   aggregation, and timezone.
+2. For work records, read the project's explicit hypothesis, execution, release dates, and role.
+   For analytics, ask what customer behavior means success and which events indicate it. Recheck
+   that the event meaning and collection fit that behavior before choosing metrics. Save and run
+   a repeatable view with the selected events, period, filters, comparison, and query in metrics.md.
+   If the hypothesis is missing in either mode, confirm it with the user rather than inventing it.
 3. Read only the source needed for this review using read-only access. Record whether the source
    was reachable, the query succeeded, data was returned, and the relevant event or field existed.
 4. Record the source conditions for every material number.
 5. Separate observations, possible explanations, and unknowns. Include customer learning and
    failed or incomplete attempts when the records support them.
-6. Write reports/YYYY-MM-DD.md with a conclusion first, followed by evidence, caveats, and next
+6. Write reports/YYYY-MM-DD-mode.md with a conclusion first, followed by evidence, caveats, and next
    checks.
 
 Do not choose substitute metrics without labeling them. Do not claim causation from a before/after
@@ -53,10 +56,10 @@ them independently and state the missing join key, release record, event, or com
 ## Weekly review
 
 ```text
-Review this project's latest period using PROJECT.md, metrics.md, sources.md, the previous report,
+Review this project's latest period using PROJECT.md, sources.md, metrics.md when applicable, the previous report,
 and the connected read-only source for the selected review mode.
 
-Return:
+Return the following as applicable to the selected mode:
 - one-line conclusion;
 - work completed or changed since the previous review;
 - each agreed metric with current value, comparison value, period, filter, denominator, timezone,
@@ -83,6 +86,10 @@ Organize it as:
 3. What changed in the agreed metrics.
 4. Which conclusions are supported, which are only hypotheses, and what cannot be attributed.
 5. What should continue, change, or stop.
+
+Close with the hypothesis, what was achieved, what failed or differed from expectations, what the
+evidence taught us, and the next hypothesis or check. Use only available sources; missing GA data
+does not prevent reviewing execution and learning, but it limits claims about measured outcomes.
 
 Keep evidence next to each material claim. Never turn an unverified number or a plausible cause
 into a fact.

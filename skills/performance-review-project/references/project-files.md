@@ -3,7 +3,7 @@
 Use these as starting points. Replace bracketed values; do not leave assumptions that have not
 been confirmed by the project owner.
 
-## README.md
+## README.md (optional)
 
 ```markdown
 # [Project name] — Performance Review
@@ -13,7 +13,8 @@ reports together.
 
 ## Start a review
 
-Read `PROJECT.md`, `metrics.md`, and `sources.md`. Then use the relevant prompt in `prompts/`.
+Read `PROJECT.md` and `sources.md`, plus `metrics.md` for analytics. Use the relevant skill prompt
+or a saved prompt in `prompts/` if that optional folder exists.
 Write the result to `reports/`.
 
 ## Review cadence
@@ -33,6 +34,7 @@ Write the result to `reports/`.
 - Review period: [dates]
 - Problem: [what problem this project addresses]
 - Hypothesis: [if we do X, Y will change because Z]
+- Hypothesis source: [project page / user confirmation; original or retrospective]
 - Expected change: [observable behavior or business outcome]
 - Change/release date: [date or unknown]
 - Relevant work sources: [tools, documents, exports]
@@ -46,10 +48,20 @@ Write the result to `reports/`.
 | --- | --- | --- | --- |
 ```
 
-## metrics.md
+## metrics.md (analytics only)
 
 ```markdown
 # Metric definitions
+
+## Repeatable analysis view
+
+- Hypothesis: [confirmed hypothesis]
+- Success behavior: [customer behavior that represents success]
+- Selected events and rationale: [why each event indicates success or a step toward it]
+- Event recheck: [meaning and collection checked; gaps or proxy limitations]
+- View: [trend / step comparison / breakdown]
+- Reproducible query or instructions: [request or retrieval steps]
+- Saved GA exploration: [link if actually created; otherwise not created]
 
 | Metric | Why it matters | Definition | Population / denominator | Comparison window | Source | Owner |
 | --- | --- | --- | --- | --- | --- | --- |

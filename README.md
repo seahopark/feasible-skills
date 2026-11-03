@@ -7,6 +7,7 @@ PM/QA workflows I've built and used while working on [Feasible Research](https:/
 | Skill | What it does | When to use it |
 |---|---|---|
 | [`user-story-mapping`](skills/user-story-mapping/SKILL.md) | Builds a user story map around the user journey (Jeff Patton framework) | When you need to organize a backlog/MVP scope around user workflows |
+| [`story-authoring`](skills/story-authoring/SKILL.md) | Turns ideas, feature requests, design work, bugs, chores, and releases into current-state-verified, testable stories without inventing missing decisions | Before creating or revising an issue that needs type selection, splitting, user-value framing, or acceptance criteria |
 | [`product-spec`](skills/product-spec/SKILL.md) | Reverse-engineers a product from screenshots/usage into a Business Discovery doc + a Product Spec doc | When an existing product's feature definitions aren't documented anywhere |
 | [`feasible-lab-prd`](skills/feasible-lab-prd/SKILL.md) | Generates an Acceptance-Criteria-centric PRD draft | When you need to quickly draft a Markdown PRD for a new feature/project |
 | [`functional-tc-authoring`](skills/functional-tc-authoring/SKILL.md) | Writes manual-QA functional test-case sheets grounded in the actual frontend code | When you need TCs pulled accurately from the code, not guessed from the UI |

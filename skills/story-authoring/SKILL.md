@@ -82,6 +82,9 @@ For Features and Design stories, keep these roles distinct:
 - **Acceptance Criteria:** externally observable completion conditions
 - **Notes:** constraints, evidence, relationships, and unknowns
 
+Use only these six elements in a Feature or Design body. Express sequence-dependent behavior as
+Scenarios in Acceptance Criteria instead of adding another section.
+
 Do not repeat `Why` as `So that`. Write a user goal in `I want`, not a screen or implementation
 mechanism. Describe observable behavior in acceptance criteria, not internal implementation.
 
@@ -99,7 +102,7 @@ Write Feature and Design acceptance criteria as Scenario / Given / When / Then.
 - Given contains only required starting conditions.
 - When is one central action or event.
 - Then is an observable result such as a screen, state, or data change.
-- Include the main flow and only boundaries that materially affect completion.
+- Include the primary completion path and only boundaries that materially affect completion.
 - Do not require function names, components, or libraries.
 - Do not specify a condition the team cannot actually verify.
 

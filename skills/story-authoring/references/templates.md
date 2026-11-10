@@ -25,6 +25,7 @@ Then [observable result]
 **Notes:**
 - [constraint, evidence, or related story]
 - [TBD or fact that needs confirmation]
+- [edge cases deliberately excluded; ownership boundary with related stories; shared criteria]
 ````
 
 When there are multiple Scenarios, make each one independently readable. Put an implementation
@@ -33,10 +34,18 @@ approach in Notes only when it is a real technical constraint.
 ## Bug
 
 ```markdown
+### Environment
+
+[device/OS/app version, account permissions, data conditions]
+
 ### Steps to reproduce
 
 1. [observed step]
 2. [observed step]
+
+### Reproduction rate
+
+[always / intermittent — approximate frequency]
 
 ### Expected
 
@@ -44,12 +53,13 @@ approach in Notes only when it is a real technical constraint.
 
 ### Actual
 
-[actual behavior]
+[actual behavior, error message, console log, or screenshot]
 
 ### Notes
 
-- [environment, condition, log, screen, or other evidence]
+- [condition, log, screen, or other evidence]
 - [anything not reproduced or still needing confirmation]
+- [reason for splitting out failures with a different cause]
 ```
 
 Use only observed steps. Do not put an unverified cause in Actual.

@@ -88,9 +88,13 @@ Scenarios in Acceptance Criteria instead of adding another section.
 Do not repeat `Why` as `So that`. Write a user goal in `I want`, not a screen or implementation
 mechanism. Describe observable behavior in acceptance criteria, not internal implementation.
 
-For a Bug, separate reproduction steps, expected behavior, and actual behavior. If it has not been
-reproduced, say so and record the missing evidence in Notes. Use plain Markdown for Chores and
-Releases; do not add Gherkin unless explicitly requested.
+For a Bug, separate reproduction steps, expected behavior, and actual behavior. Reproduction steps
+include environment details (device, OS, app version, account permissions, data conditions) and a
+reproduction rate (always / intermittent). If it has not been reproduced, say so and record the
+missing evidence in Notes. When failures with different causes are mixed into one story (e.g. a
+network error worth retrying vs. a file-format or size error where retrying is pointless), split
+the reproduction steps and expected/actual behavior by failure type, or split into separate stories.
+Use plain Markdown for Chores and Releases; do not add Gherkin unless explicitly requested.
 
 Done when: every required section for the chosen type exists and serves a distinct purpose.
 
@@ -100,11 +104,24 @@ Write Feature and Design acceptance criteria as Scenario / Given / When / Then.
 
 - One Scenario covers one user situation.
 - Given contains only required starting conditions.
-- When is one central action or event.
+- When is one central action or event. Two or more "and"s is a signal to split it.
 - Then is an observable result such as a screen, state, or data change.
 - Include the primary completion path and only boundaries that materially affect completion.
 - Do not require function names, components, or libraries.
 - Do not specify a condition the team cannot actually verify.
+
+The following Scenario types are commonly missed. Check each one; if a story deliberately omits
+one, say so explicitly in Notes rather than leaving it as a silent gap.
+
+| Missed type | Description |
+|---|---|
+| Loading / in-progress state | Loading indicator after an action, before a response; duplicate-tap or duplicate-submit guard |
+| Empty state | The screen when the target data has zero items |
+| Error state | Network failure, server error. If failures with different causes are mixed (e.g. a network error worth retrying vs. a file-format or size error where retrying is pointless), split into a separate Scenario or a separate story |
+| Unauthorized user | A viewer reaching an edit-only action, etc. |
+| Re-entry case | State when the same action is retried after being deferred or interrupted |
+| State-transition boundary | The UX at the moment one state changes to another, e.g. empty state to first data appearing |
+| Interruption / context switch | Leaving to another screen or app mid-process and returning; if out of scope, say so explicitly in Notes |
 
 When the concept or policy is undecided, do not fabricate behavior. Mark it as `TBD — define the
 concept and success criteria before implementation`. Do not disguise the unknown itself as a
@@ -112,7 +129,30 @@ finished feature's acceptance criterion.
 
 Done when: each Scenario is independently testable, or the blocking unknown is explicit.
 
-## 7. Run the quality gate
+## 7. Check boundaries with related stories
+
+When a related story exists in the same flow or has a symmetric counterpart (e.g. camera
+permission request vs. permission-status check, camera permission vs. photo library permission),
+check the following in addition to this story's own quality. This check cannot be done from one
+story alone — open the related stories found in step 2 and compare them directly.
+
+- **Ownership boundary:** if similarly named Scenarios appear in multiple stories (e.g. "when the
+  user denies" and "when the permission is off"), state in Notes which story owns which situation.
+  If the boundary is genuinely unclear, leave it as a question rather than deciding arbitrarily.
+- **Exposed-field consistency:** if multiple stories reference the same data or screen element
+  (e.g. the fields shown on a post), confirm they list the same set. If they differ, unify them or
+  make the difference explicit and intentional.
+- **Shared-criteria sync:** values multiple stories must share (retry count, timeout, failure
+  message style) should be decided once and reflected in every affected story's acceptance
+  criteria or Notes.
+- **Symmetry check:** for a pair of stories with a matching pattern, check whether a Scenario that
+  exists in only one side (re-entry, returning from settings without changing anything, etc.) is
+  also needed on the other side.
+
+Done when: ambiguous ownership boundaries and shared criteria are stated in each story's Notes, or
+left as explicit open questions.
+
+## 8. Run the quality gate
 
 Check all of the following:
 
@@ -126,13 +166,16 @@ Check all of the following:
 - It does not combine multiple independent outcomes.
 - Progress notes or retrospectives are not mixed into requirements.
 - Notes do not contradict acceptance criteria.
+- Ownership boundaries with adjacent or symmetric stories do not overlap.
+- Exposed fields and shared criteria (retry count, message style, etc.) are consistent across
+  stories that share them.
 
 Do not hide a failed check with smoother wording. Inspect more evidence, split the story, or leave
 an explicit question.
 
 Done when: every check passes or every unresolved check is visible.
 
-## 8. Persist and read back
+## 9. Persist and read back
 
 If the user asked only for a draft or review, return it without writing to an external system. If
 creation was requested, search for duplicates by title and key terms, then persist it. When editing,
